@@ -1,0 +1,40 @@
+---
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Image Name"
+        required: true
+      variant:
+        description: "Image Variant"
+        required: true
+
+name: Build Container
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build ${{ github.event.inputs.name }}:${{ github.event.inputs.variant }}
+
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+
+      - name: Log in to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Read Version
+        run: echo "IMAGE_VERSION=$(cat .image-version)" >> $GITHUB_ENV
+        working-directory: "${{ github.event.inputs.name }}/${{ github.event.inputs.variant }}"
+
+      - name: Build and Push ${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ github.event.inputs.name }}
+          file: ${{ github.event.inputs.variant }}/Dockerfile
+          push: true
+          tags: ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}
