@@ -21,6 +21,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build ${{ github.event.inputs.name }}:${{ github.event.inputs.variant }}
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout Project
