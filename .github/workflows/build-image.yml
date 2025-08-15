@@ -5,9 +5,15 @@ on:
       name:
         description: "Image Name"
         required: true
+        type: choice
+        options:
+          - koboldcpp
       variant:
         description: "Image Variant"
         required: true
+        type: choice
+        options:
+          - rocm
 
 name: Build Container
 
