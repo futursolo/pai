@@ -12,20 +12,21 @@ RUN git clone --depth 1 \
 
 FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION} AS build-builder
 
-RUN apt-get update && \
-    apt-get install -y hipblas && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+USER root
 
-RUN groupadd -g 1999 docker-user && \
-    useradd -m -s /bin/bash -u 1999 -g 1999 docker-user
+RUN mkdir -p /opt/build
+COPY ./common/ /opt/build/common
 
-RUN echo "docker-user ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/999-docker-user
+WORKDIR /opt/build
+
+RUN /opt/build/common/scripts/apt-pre.sh
+RUN /opt/build/common/scripts/apt-install-sudo.sh
+RUN /opt/build/common/scripts/apt-install-python3-dev.sh
+RUN /opt/build/common/scripts/apt-install-hipblas-dev.sh
+RUN /opt/build/common/scripts/apt-install-build-essential.sh
+RUN /opt/build/common/scripts/create-docker-user.sh
 
 USER docker-user
-
-RUN sudo apt-get update && \
-    sudo apt-get install -y hipblas-dev build-essential
 
 COPY --from=build-git --chown=docker-user:docker-user /opt/koboldcpp-rocm /opt/koboldcpp
 
@@ -40,19 +41,19 @@ RUN rm -rf .git
 
 FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION}
 
-RUN apt-get update && \
-    apt-get install -y hipblas && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+COPY ./common/ /opt/build/common/
+COPY ./koboldcpp/rocm/ /opt/build/koboldcpp/rocm/
 
-RUN groupadd -g 1999 docker-user && \
-    useradd -m -s /bin/bash -u 1999 -g 1999 docker-user
+RUN /opt/build/common/scripts/apt-pre.sh
+RUN /opt/build/common/scripts/apt-rocminfo-deps.sh
+RUN /opt/build/common/scripts/apt-post.sh
 
-RUN echo "docker-user ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/999-docker-user
+RUN /opt/build/common/scripts/create-docker-user.sh
+RUN /opt/build/common/cleanup-build.sh
 
 USER docker-user
 
-COPY --from=build-builder /opt/koboldcpp /opt/koboldcpp
+COPY --from=build-builder --chown=docker-user:docker-user /opt/koboldcpp /opt/koboldcpp
 
 WORKDIR /opt/koboldcpp
 
