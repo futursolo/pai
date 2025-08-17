@@ -48,9 +48,13 @@ RUN /opt/build/common/scripts/create-docker-user.sh
 USER docker-user
 
 COPY --from=build-git --chown=docker-user:docker-user /opt/ComfyUI /opt/comfyui
-COPY --from=build-pytorch --chown=docker-user:docker-user /opt/pytorch-venv /opt/comfyui/.venv
+COPY --from=build-pytorch --chown=docker-user:docker-user /opt/pytorch-venv /opt/pytorch-venv
 
 WORKDIR /opt/comfyui
+
+RUN python3 -m venv ./.venv/
+RUN realpath $(/opt/pytorch-venv/bin/python3 -c "import site; print(site.getsitepackages()[0])") \
+    > $(./.venv/bin/python3 -c "import site; print(site.getsitepackages()[0])")/base_venv.pth
 
 RUN ./.venv/bin/pip install -r requirements.txt
 
@@ -68,6 +72,7 @@ RUN --mount=type=bind,source=./common,target=/opt/build/common/ \
 
 USER docker-user
 
+COPY --from=build-pytorch --chown=docker-user:docker-user /opt/pytorch-venv /opt/pytorch-venv
 COPY --from=build-comfyui --chown=docker-user:docker-user /opt/comfyui /opt/comfyui
 
 WORKDIR /opt/comfyui
