@@ -7,7 +7,7 @@ WORKDIR /tmp
 RUN curl -O -L \
     https://github.com/LostRuins/koboldcpp/releases/download/${KOBALDCPP_VERSION}/koboldcpp-linux-x64-nocuda
 
-RUN ubuntu:24.04 as build-final
+FROM ubuntu:24.04 AS build-final
 
 RUN mkdir -p /opt/build
 COPY ./common/ /opt/build/common
