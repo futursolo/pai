@@ -14,7 +14,6 @@ FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION} AS build-pytorch
 
 USER root
 
-RUN mkdir -p /opt/build
 COPY ./common/ /opt/build/common
 
 WORKDIR /opt/build
@@ -35,7 +34,6 @@ FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION} AS build-comfyui
 
 USER root
 
-RUN mkdir -p /opt/build
 COPY ./common/ /opt/build/common
 
 WORKDIR /opt/build
@@ -60,25 +58,38 @@ RUN ./.venv/bin/pip install -r requirements.txt
 
 RUN rm -rf .git
 
-FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION} AS build-final
+FROM ubuntu:24.04 AS build-base
 
-USER root
+COPY ./common/ /opt/build/common
 
-RUN --mount=type=bind,source=./common,target=/opt/build/common/ \
-    /opt/build/common/scripts/apt-pre.sh && \
-    /opt/build/common/scripts/apt-install-python3-minimal.sh && \
-    /opt/build/common/scripts/apt-post.sh && \
-    /opt/build/common/scripts/create-docker-user.sh
+WORKDIR /opt/build
+
+RUN /opt/build/common/scripts/apt-pre.sh
+RUN /opt/build/common/scripts/apt-install-python3-minimal.sh
+RUN /opt/build/common/scripts/apt-install-rocminfo-deps.sh
+RUN /opt/build/common/scripts/apt-post.sh
+
+RUN /opt/build/common/scripts/create-docker-user.sh
+
+RUN /opt/build/common/scripts/cleanup-build.sh
+
+FROM scratch
+
+COPY --from=build-base / /
+COPY --from=build-pytorch /opt/amdgpu /opt/amdgpu
+COPY --from=build-pytorch /opt/rocm/ /opt/rocm/
+
+COPY --from=build-pytorch --chown=root:root /opt/pytorch-venv /opt/pytorch-venv
+COPY --from=build-comfyui --chown=docker-user:docker-user /opt/comfyui /opt/comfyui
+
+ENV PATH=/opt/rocm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 USER docker-user
 
-COPY --from=build-pytorch --chown=docker-user:docker-user /opt/pytorch-venv /opt/pytorch-venv
-COPY --from=build-comfyui --chown=docker-user:docker-user /opt/comfyui /opt/comfyui
+SHELL ["/bin/bash", "-c"]
 
 WORKDIR /opt/comfyui
 
 ENV COMFYUI_LISTEN="0.0.0.0"
-
-SHELL ["/bin/bash", "-c"]
 
 CMD ./.venv/bin/python3 main.py --listen ${COMFYUI_LISTEN}
