@@ -17,16 +17,15 @@ COPY ./common/ /opt/build/common
 WORKDIR /opt/build
 
 RUN /opt/build/common/scripts/apt-pre.sh
-RUN /opt/build/common/scripts/apt-install-sudo.sh
 RUN /opt/build/common/scripts/apt-install-vulkan-deps.sh
+RUN /opt/build/common/scripts/apt-post.sh
 
 RUN /opt/build/common/scripts/create-docker-user.sh
 
-RUN /opt/build/common/scripts/apt-post.sh
 RUN /opt/build/common/scripts/cleanup-build.sh
 
 RUN mkdir -p /opt/koboldcpp
-COPY --from=build-curl /tmp/koboldcpp-linux-x64-nocuda /opt/koboldcpp/koboldcpp
+COPY --from=build-curl --chown=root:root /tmp/koboldcpp-linux-x64-nocuda /opt/koboldcpp/koboldcpp
 
 RUN chmod +x /opt/koboldcpp/koboldcpp
 
