@@ -26,6 +26,8 @@ RUN /opt/build/common/scripts/cleanup-build.sh
 RUN mkdir -p /opt/koboldcpp
 COPY --from=build-curl /tmp/koboldcpp-linux-x64-nocuda /opt/koboldcpp/koboldcpp
 
+RUN chmod +x /opt/koboldcpp/koboldcpp
+
 FROM scratch
 
 COPY --from=build-final / /
