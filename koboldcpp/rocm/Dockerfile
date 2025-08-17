@@ -10,23 +10,22 @@ RUN git clone --depth 1 \
     --branch ${KOBALDCPP_ROCM_VERSION} \
     https://github.com/YellowRoseCx/koboldcpp-rocm.git
 
-FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION} AS build-app
+FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION} AS build-builder
 
-USER root
+RUN apt-get update && \
+    apt-get install -y hipblas && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /opt/build
-COPY ./common/ /opt/build/common
+RUN groupadd -g 1999 docker-user && \
+    useradd -m -s /bin/bash -u 1999 -g 1999 docker-user
 
-WORKDIR /opt/build
-
-RUN /opt/build/common/scripts/apt-pre.sh
-RUN /opt/build/common/scripts/apt-install-sudo.sh
-RUN /opt/build/common/scripts/apt-install-python3-dev.sh
-RUN /opt/build/common/scripts/apt-install-hipblas-dev.sh
-RUN /opt/build/common/scripts/apt-install-build-essential.sh
-RUN /opt/build/common/scripts/create-docker-user.sh
+RUN echo "docker-user ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/999-docker-user
 
 USER docker-user
+
+RUN sudo apt-get update && \
+    sudo apt-get install -y hipblas-dev build-essential
 
 COPY --from=build-git --chown=docker-user:docker-user /opt/koboldcpp-rocm /opt/koboldcpp
 
@@ -39,44 +38,24 @@ RUN make LLAMA_HIPBLAS=1 GPU_TARGETS="${ROCM_GPU_TARGETS}" ALLAMDGPUS=1 -j$(npro
 
 RUN rm -rf .git
 
-WORKDIR /opt/rocm/lib
+FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION}
 
-# Remove Extra Libraries
-RUN find -mindepth 1 -maxdepth 1 -type d | grep -v "rocblas" | xargs sudo rm -rf
+RUN apt-get update && \
+    apt-get install -y hipblas && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-FROM ubuntu:24.04 AS build-final
+RUN groupadd -g 1999 docker-user && \
+    useradd -m -s /bin/bash -u 1999 -g 1999 docker-user
 
-RUN mkdir -p /opt/build
-COPY ./common/ /opt/build/common
-
-WORKDIR /opt/build
-
-RUN /opt/build/common/scripts/apt-pre.sh
-RUN /opt/build/common/scripts/apt-install-sudo.sh
-RUN /opt/build/common/scripts/apt-install-python3-minimal.sh
-RUN /opt/build/common/scripts/apt-install-rocminfo-deps.sh
-RUN /opt/build/common/scripts/apt-post.sh
-
-RUN /opt/build/common/scripts/create-docker-user.sh
-
-RUN /opt/build/common/scripts/cleanup-build.sh
-
-COPY --from=build-app /opt/koboldcpp /opt/koboldcpp
-COPY --from=build-app /opt/amdgpu /opt/amdgpu
-COPY --from=build-app /opt/rocm/lib /opt/rocm/lib
-COPY --from=build-app /opt/rocm/bin /opt/rocm/bin
-COPY --from=build-app /opt/rocm/libexec /opt/rocm/libexec
-
-FROM scratch
-
-COPY --from=build-final / /
+RUN echo "docker-user ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/999-docker-user
 
 USER docker-user
 
+COPY --from=build-builder /opt/koboldcpp /opt/koboldcpp
+
 WORKDIR /opt/koboldcpp
 
-SHELL ["/bin/bash", "-c"]
-
-ENV PATH=/opt/rocm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV ROCM_PATH=/opt/rocm
 
 ENTRYPOINT [ "python3", "/opt/koboldcpp/koboldcpp.py" ]
