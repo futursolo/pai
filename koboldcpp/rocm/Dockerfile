@@ -44,7 +44,10 @@ WORKDIR /opt/rocm/lib
 # Remove Extra Libraries
 RUN find -mindepth 1 -maxdepth 1 -type d | grep -v "rocblas" | xargs sudo rm -rf
 
-FROM ubuntu:24.04 as build-final
+FROM ubuntu:24.04 AS build-final
+
+RUN mkdir -p /opt/build
+COPY ./common/ /opt/build/common
 
 WORKDIR /opt/build
 
