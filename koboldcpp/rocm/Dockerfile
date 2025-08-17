@@ -20,15 +20,12 @@ COPY ./common/ /opt/build/common
 WORKDIR /opt/build
 
 RUN /opt/build/common/scripts/apt-pre.sh
-RUN /opt/build/common/scripts/apt-install-sudo.sh
 RUN /opt/build/common/scripts/apt-install-python3-dev.sh
 RUN /opt/build/common/scripts/apt-install-hipblas-dev.sh
 RUN /opt/build/common/scripts/apt-install-build-essential.sh
 RUN /opt/build/common/scripts/create-docker-user.sh
 
-USER docker-user
-
-COPY --from=build-git --chown=docker-user:docker-user /opt/koboldcpp-rocm /opt/koboldcpp
+COPY --from=build-git --chown=root:root /opt/koboldcpp-rocm /opt/koboldcpp
 
 WORKDIR /opt/koboldcpp
 
@@ -42,7 +39,7 @@ RUN rm -rf .git
 WORKDIR /opt/rocm/lib
 
 # Remove Extra Libraries
-RUN find -mindepth 1 -maxdepth 1 -type d | grep -v "rocblas" | xargs sudo rm -rf
+RUN find -mindepth 1 -maxdepth 1 -type d | grep -v "rocblas" | xargs rm -rf
 
 FROM ubuntu:24.04 AS build-final
 
@@ -52,7 +49,6 @@ COPY ./common/ /opt/build/common
 WORKDIR /opt/build
 
 RUN /opt/build/common/scripts/apt-pre.sh
-RUN /opt/build/common/scripts/apt-install-sudo.sh
 RUN /opt/build/common/scripts/apt-install-python3-minimal.sh
 RUN /opt/build/common/scripts/apt-install-rocminfo-deps.sh
 RUN /opt/build/common/scripts/apt-post.sh
