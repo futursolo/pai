@@ -48,7 +48,7 @@ RUN /opt/build/common/scripts/create-docker-user.sh
 USER docker-user
 
 COPY --from=build-git --chown=docker-user:docker-user /opt/ComfyUI /opt/comfyui
-COPY --from=build-pytorch --chown=docker-user:docker-user /opt/pytorch-venv /opt/comfyui/.venv/
+COPY --from=build-pytorch --chown=docker-user:docker-user /opt/pytorch-venv /opt/comfyui/.venv
 
 WORKDIR /opt/comfyui
 
