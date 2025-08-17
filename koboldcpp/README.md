@@ -4,9 +4,13 @@ Run GGUF models easily with a KoboldAI UI.
 
 ### Variants
 
-- rocm: Supported AMD Radeon Graphics
+- rocm: Supports AMD Radeon Graphics with ROCm Support
 
   Base Repository: https://github.com/YellowRoseCx/koboldcpp-rocm/
+
+- vulkan: Supports any Vulkan-compatible Graphics Card
+
+  Base Repository: https://github.com/LostRuins/koboldcpp/
 
 ### Usage
 
