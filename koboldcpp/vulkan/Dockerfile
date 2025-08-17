@@ -1,11 +1,13 @@
-ARG KOBALDCPP_VERSION=v1.97.4
+ARG KOBOLDCPP_VERSION=v1.97.4
 
 FROM curlimages/curl:8.15.0 AS build-curl
+
+ARG KOBOLDCPP_VERSION
 
 WORKDIR /tmp
 
 RUN curl -O -L \
-    https://github.com/LostRuins/koboldcpp/releases/download/${KOBALDCPP_VERSION}/koboldcpp-linux-x64-nocuda
+    https://github.com/LostRuins/koboldcpp/releases/download/${KOBOLDCPP_VERSION}/koboldcpp-linux-x64-nocuda
 
 FROM ubuntu:24.04 AS build-final
 
