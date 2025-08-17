@@ -43,7 +43,7 @@ jobs:
       - name: Build and Push ${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}
         uses: docker/build-push-action@v6
         with:
-          context: ${{ github.event.inputs.name }}
+          context: .
           file: ${{ github.event.inputs.name }}/${{ github.event.inputs.variant }}/Dockerfile
           push: true
           tags: ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}
