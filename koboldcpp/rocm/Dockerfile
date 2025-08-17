@@ -10,18 +10,27 @@ RUN git clone --depth 1 \
     --branch ${KOBOLDCPP_ROCM_VERSION} \
     https://github.com/YellowRoseCx/koboldcpp-rocm.git
 
-FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION} AS build-app
+FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION} AS build-rocm-base
 
 USER root
 
-RUN mkdir -p /opt/build
 COPY ./common/ /opt/build/common
 
 WORKDIR /opt/build
 
 RUN /opt/build/common/scripts/apt-pre.sh
-RUN /opt/build/common/scripts/apt-install-python3-dev.sh
 RUN /opt/build/common/scripts/apt-install-hipblas-dev.sh
+
+FROM build-rocm-base AS build-rocm
+
+WORKDIR /opt/rocm/lib
+
+# Remove Extra Libraries
+RUN find -mindepth 1 -maxdepth 1 -type d | grep -v "rocblas" | xargs rm -rf
+
+FROM build-rocm-base AS build-koboldcpp
+
+RUN /opt/build/common/scripts/apt-install-python3-dev.sh
 RUN /opt/build/common/scripts/apt-install-build-essential.sh
 RUN /opt/build/common/scripts/create-docker-user.sh
 
@@ -36,14 +45,8 @@ RUN make LLAMA_HIPBLAS=1 GPU_TARGETS="${ROCM_GPU_TARGETS}" ALLAMDGPUS=1 -j$(npro
 
 RUN rm -rf .git
 
-WORKDIR /opt/rocm/lib
-
-# Remove Extra Libraries
-RUN find -mindepth 1 -maxdepth 1 -type d | grep -v "rocblas" | xargs rm -rf
-
 FROM ubuntu:24.04 AS build-base
 
-RUN mkdir -p /opt/build
 COPY ./common/ /opt/build/common
 
 WORKDIR /opt/build
@@ -57,15 +60,14 @@ RUN /opt/build/common/scripts/create-docker-user.sh
 
 RUN /opt/build/common/scripts/cleanup-build.sh
 
-
 FROM scratch
 
 COPY --from=build-base / /
-COPY --from=build-app /opt/koboldcpp /opt/koboldcpp
-COPY --from=build-app /opt/amdgpu /opt/amdgpu
-COPY --from=build-app /opt/rocm/lib /opt/rocm/lib
-COPY --from=build-app /opt/rocm/bin /opt/rocm/bin
-COPY --from=build-app /opt/rocm/libexec /opt/rocm/libexec
+COPY --from=build-rocm /opt/amdgpu /opt/amdgpu
+COPY --from=build-rocm /opt/rocm/lib /opt/rocm/lib
+COPY --from=build-rocm /opt/rocm/bin /opt/rocm/bin
+COPY --from=build-rocm /opt/rocm/libexec /opt/rocm/libexec
+COPY --from=build-koboldcpp /opt/koboldcpp /opt/koboldcpp
 
 USER docker-user
 
