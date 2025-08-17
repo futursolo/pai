@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build ${{ github.event.inputs.name }}:${{ github.event.inputs.variant }}
     permissions:
-      contents: read
+      contents: write
       packages: write
 
     steps:
@@ -37,8 +37,30 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Read Version
-        run: echo "IMAGE_VERSION=$(cat .image-version)" >> $GITHUB_ENV
+        run: echo "BASE_IMAGE_VERSION=$(cat .image-version)" >> $GITHUB_ENV
         working-directory: "${{ github.event.inputs.name }}/${{ github.event.inputs.variant }}"
+
+      - name: Define Versions (Release)
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          _DATE_VER=$(date +'%Y%m%d')
+          IMAGE_VERSION=${BASE_IMAGE_VERSION}-${_DATE_VER}
+          IMAGE_VARIANT_VERSION=${{ github.event.inputs.variant }}
+          RELEASE_TAG=${{ github.event.inputs.name }}-${IMAGE_VERSION}
+
+          echo "IMAGE_VERSION=${IMAGE_VERSION}" >> $GITHUB_ENV
+          echo "IMAGE_VARIANT_VERSION=${IMAGE_VARIANT_VERSION}" >> $GITHUB_ENV
+          echo "RELEASE_TAG=${RELEASE_TAG}" >> $GITHUB_ENV
+
+      - name: Define Versions (Preview)
+        if: ${{ github.ref != 'refs/heads/master' }}
+        run: |
+          _DATE_VER=$(date +'%Y%m%d')
+          IMAGE_VERSION=${BASE_IMAGE_VERSION}-preview
+          IMAGE_VARIANT_VERSION=${{ github.event.inputs.variant }}-preview
+
+          echo "IMAGE_VERSION=${IMAGE_VERSION}" >> $GITHUB_ENV
+          echo "IMAGE_VARIANT_VERSION=${IMAGE_VARIANT_VERSION}" >> $GITHUB_ENV
 
       - name: Build and Push ${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}
         uses: docker/build-push-action@v6
@@ -46,4 +68,21 @@ jobs:
           context: .
           file: ${{ github.event.inputs.name }}/${{ github.event.inputs.variant }}/Dockerfile
           push: true
-          tags: ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}
+          tags: |
+            ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}
+            ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VARIANT_VERSION }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: ${{ github.ref == 'refs/heads/master' }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          generate_release_notes: true
+          tag_name: ${{ env.RELEASE_TAG }}
+          target_commitish: ${{ github.sha }}
+          body: |
+            Image: ${{ github.event.inputs.name }}
+            Variant: ${{ github.event.inputs.variant }}
+            Version: ${{ env.IMAGE_VERSION }}
+            URI: ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VARIANT_VERSION }}
+            URI: ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}
