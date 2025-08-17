@@ -31,6 +31,9 @@ jobs:
         run: |
           sudo systemctl stop docker.service
           sudo systemctl stop docker.socket
+
+      - name: Remove Docker Data
+        run: |
           sudo rm -rf /var/lib/docker
           sudo mkdir -p /var/lib/docker
 
@@ -45,7 +48,7 @@ jobs:
           remove-codeql: "true"
           build-mount-path: /var/lib/docker
 
-      - name: Show Free Space:
+      - name: Show Disk Space
         run: df -h
 
       - name: Modify Docker Root
