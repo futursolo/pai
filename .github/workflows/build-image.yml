@@ -36,6 +36,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Free Disk Space
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/apache/flink/02d30ace69dc18555a5085eccf70ee884e73a16e/tools/azure-pipelines/free_disk_space.sh | bash
+
       - name: Read Version
         run: echo "BASE_IMAGE_VERSION=$(cat .image-version)" >> $GITHUB_ENV
         working-directory: "${{ github.event.inputs.name }}/${{ github.event.inputs.variant }}"
