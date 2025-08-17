@@ -1,13 +1,13 @@
 ARG ROCM_IMAGE_VERSION=6.4.3-complete
-ARG KOBALDCPP_ROCM_VERSION=v1.97.4.yr0-ROCm
+ARG KOBOLDCPP_ROCM_VERSION=v1.97.4.yr0-ROCm
 
 FROM bitnami/git AS build-git
 
-ARG KOBALDCPP_ROCM_VERSION
+ARG KOBOLDCPP_ROCM_VERSION
 
 WORKDIR /opt/
 RUN git clone --depth 1 \
-    --branch ${KOBALDCPP_ROCM_VERSION} \
+    --branch ${KOBOLDCPP_ROCM_VERSION} \
     https://github.com/YellowRoseCx/koboldcpp-rocm.git
 
 FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION} AS build-app
