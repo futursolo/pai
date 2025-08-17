@@ -28,3 +28,4 @@ and CUDA-based images are usually already available from other sources.
 ## Supported Images
 
 - [KoboldCPP](./koboldcpp/README.md)
+- [ComfyUI](./comfyui/README.md)

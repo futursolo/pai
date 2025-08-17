@@ -76,6 +76,8 @@ COPY --from=build-rocm /opt/rocm/ /opt/rocm/
 COPY --from=build-pytorch --chown=root:root /opt/pytorch-venv /opt/pytorch-venv
 COPY --from=build-comfyui --chown=root:root /opt/comfyui /opt/comfyui
 
+COPY ./comfyui/common/scripts/entrypoint.sh /
+
 ENV PATH=/opt/comfyui/.venv/bin/:/opt/rocm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 USER docker-user
@@ -85,7 +87,9 @@ SHELL ["/bin/bash", "-c"]
 WORKDIR /opt/comfyui
 
 ENV COMFYUI_LISTEN="0.0.0.0"
+ENV COMFYUI_BASE_DIR="/home/docker-user/data"
+ENV COMFYUI_DB_URL="sqlite:////home/docker-user/data/user/comfyui.db"
 
-ENTRYPOINT [ "python3", "main.py" ]
+VOLUME /home/docker-user/data
 
-CMD --listen ${COMFYUI_LISTEN}
+ENTRYPOINT /entrypoint.sh
