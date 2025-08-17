@@ -51,7 +51,7 @@ jobs:
       - name: Show Disk Space
         run: df -h
 
-      - name: Modify Docker Root
+      - name: Start Docker Service
         run: |
           sudo systemctl start docker.service
           sudo systemctl start docker.socket
