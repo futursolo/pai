@@ -2,4 +2,4 @@
 
 set -ex
 
-apt-get install -y rocminfo
+apt-get install -y python3
