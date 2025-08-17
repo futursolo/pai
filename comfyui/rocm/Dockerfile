@@ -32,6 +32,8 @@ RUN ./bin/pip install https://repo.radeon.com/rocm/manylinux/rocm-rel-6.4.2/torc
 
 FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION} AS build-comfyui
 
+USER root
+
 RUN mkdir -p /opt/build
 COPY ./common/ /opt/build/common
 
@@ -54,6 +56,8 @@ RUN ./.venv/bin/pip install -r requirements.txt
 RUN rm -rf .git
 
 FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION} AS build-final
+
+USER root
 
 RUN --mount=type=bind,source=./common,target=/opt/build/common/ \
     /opt/build/common/scripts/apt-pre.sh && \
