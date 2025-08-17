@@ -41,7 +41,7 @@ WORKDIR /opt/rocm/lib
 # Remove Extra Libraries
 RUN find -mindepth 1 -maxdepth 1 -type d | grep -v "rocblas" | xargs rm -rf
 
-FROM ubuntu:24.04 AS build-final
+FROM ubuntu:24.04 AS build-base
 
 RUN mkdir -p /opt/build
 COPY ./common/ /opt/build/common
@@ -57,15 +57,15 @@ RUN /opt/build/common/scripts/create-docker-user.sh
 
 RUN /opt/build/common/scripts/cleanup-build.sh
 
+
+FROM scratch
+
+COPY --from=build-base / /
 COPY --from=build-app /opt/koboldcpp /opt/koboldcpp
 COPY --from=build-app /opt/amdgpu /opt/amdgpu
 COPY --from=build-app /opt/rocm/lib /opt/rocm/lib
 COPY --from=build-app /opt/rocm/bin /opt/rocm/bin
 COPY --from=build-app /opt/rocm/libexec /opt/rocm/libexec
-
-FROM scratch
-
-COPY --from=build-final / /
 
 USER docker-user
 

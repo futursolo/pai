@@ -27,6 +27,32 @@ jobs:
       packages: write
 
     steps:
+      - name: Stop Docker Service
+        run: |
+          sudo systemctl stop docker.service
+          sudo systemctl stop docker.socket
+          sudo rm -rf /var/lib/docker
+          sudo mkdir -p /var/lib/docker
+
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 1024
+          swap-size-mb: 1024
+          remove-dotnet: "true"
+          remove-android: "true"
+          remove-haskell: "true"
+          remove-codeql: "true"
+          build-mount-path: /var/lib/docker
+
+      - name: Show Free Space:
+        run: df -h
+
+      - name: Modify Docker Root
+        run: |
+          sudo systemctl start docker.service
+          sudo systemctl start docker.socket
+
       - name: Checkout Project
         uses: actions/checkout@v4
 
@@ -36,10 +62,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Free Disk Space
-        run: |
-          curl -fsSL https://raw.githubusercontent.com/apache/flink/02d30ace69dc18555a5085eccf70ee884e73a16e/tools/azure-pipelines/free_disk_space.sh | bash
 
       - name: Read Version
         run: echo "BASE_IMAGE_VERSION=$(cat .image-version)" >> $GITHUB_ENV
