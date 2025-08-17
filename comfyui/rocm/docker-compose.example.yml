@@ -1,0 +1,39 @@
+---
+name: example-comfyui
+
+services:
+  comfyui:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    image: ghcr.io/futursolo/portable-ai/comfyui:v0.3.50-rocm-v6.4.2
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/kfd:/dev/kfd
+    environment:
+      HSA_OVERRIDE_GFX_VERSION: 11.0.0
+      PYTORCH_ROCM_ARCH: gfx1100
+      TZ: Etc/UTC
+      COMFYUI_LISTEN: 0.0.0.0
+    group_add:
+      - video
+      - render
+    ports:
+      - 8188:8188
+
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - read_only: false
+        source: ../../test-models
+        target: /opt/comfyui/models
+        type: bind
+      # - read_only: false
+      #   source: ./data/input
+      #   target: /opt/comfyui/input
+      #   type: bind
+      # - read_only: false
+      #   source: ./data/output
+      #   target: /opt/comfyui/output
+      #   type: bind
