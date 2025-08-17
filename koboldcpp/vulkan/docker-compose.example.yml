@@ -9,7 +9,6 @@ services:
     image: ghcr.io/futursolo/portable-ai/koboldcpp:v1.97.4-vulkan
     devices:
       - /dev/dri:/dev/dri
-      - /dev/kfd:/dev/kfd
     environment:
       TZ: Etc/UTC
     group_add:
@@ -21,7 +20,7 @@ services:
     command: >
       --contextsize 8192
       --model /home/docker-user/models/Llama-3.3-70B-Instruct-Q4_K_M.gguf
-      --usecublas --port 5001 --quiet
+      --usevulkan --port 5001 --quiet
       --password mypassword
     security_opt:
       - seccomp:unconfined
