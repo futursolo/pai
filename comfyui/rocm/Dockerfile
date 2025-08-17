@@ -57,7 +57,7 @@ FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION} AS build-final
 
 RUN --mount=type=bind,source=./common,target=/opt/build/common/ \
     /opt/build/common/scripts/apt-pre.sh && \
-    /opt/build/common/scripts/apt-install-python3-dev.sh && \
+    /opt/build/common/scripts/apt-install-python3-minimal.sh && \
     /opt/build/common/scripts/create-docker-user.sh && \
     /opt/build/common/scripts/apt-post.sh && \
     /opt/build/common/scripts/cleanup-build.sh
