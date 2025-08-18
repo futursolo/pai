@@ -2,6 +2,10 @@
 
 set -e
 
+if [ -z "$( ls -A $COMFYUI_BASE_DIR )" ]; then
+    cp -r /opt/comfyui-base-tpl/* $COMFYUI_BASE_DIR
+fi
+
 mkdir -p $COMFYUI_BASE_DIR/input
 mkdir -p $COMFYUI_BASE_DIR/output
 mkdir -p $COMFYUI_BASE_DIR/models
