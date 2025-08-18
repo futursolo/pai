@@ -47,7 +47,7 @@ WORKDIR /opt/comfyui
 RUN python3 -m venv ./.venv/
 RUN env \
     PATH="/opt/comfyui/.venv/bin:$PATH" \
-    /opt/build/common/python3-link-parent-venv.sh /opt/pytorch-venv
+    /opt/build/common/scripts/python3-link-parent-venv.sh /opt/pytorch-venv
 
 RUN ./.venv/bin/pip install -r requirements.txt
 
