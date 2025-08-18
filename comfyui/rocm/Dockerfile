@@ -69,9 +69,6 @@ RUN /opt/build/common/scripts/create-docker-user.sh
 
 RUN /opt/build/common/scripts/cleanup-build.sh
 
-USER docker-user
-RUN mkdir -p /home/docker-user/data
-
 FROM scratch
 
 COPY --from=build-base / /
@@ -80,7 +77,7 @@ COPY --from=build-rocm /opt/rocm/ /opt/rocm/
 
 COPY --from=build-pytorch --chown=root:root /opt/pytorch-venv /opt/pytorch-venv
 COPY --from=build-comfyui --chown=root:root /opt/comfyui /opt/comfyui
-COPY --from=build-comfyui --chown=root:root /opt/comfyui /opt/comfyui-base-tpl
+COPY --from=build-comfyui --chown=docker-user:docker-user /opt/comfyui-base-tpl /home/docker-user/data
 
 COPY ./comfyui/common/scripts/entrypoint.sh /
 
