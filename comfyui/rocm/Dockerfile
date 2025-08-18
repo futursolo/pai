@@ -19,6 +19,8 @@ RUN rm -rf /opt/rocm/lib/llvm
 
 FROM rocm/dev-ubuntu-24.04:${ROCM_IMAGE_VERSION} AS build-pytorch
 
+ARG PYTORCH_ENV_VERSION
+
 USER root
 
 COPY ./common/ /opt/build/common/
