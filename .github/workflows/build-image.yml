@@ -8,6 +8,7 @@ on:
         type: choice
         options:
           - koboldcpp
+          - comfyui
       variant:
         description: "Image Variant"
         required: true
@@ -111,8 +112,8 @@ jobs:
           tag_name: ${{ env.RELEASE_TAG }}
           target_commitish: ${{ github.sha }}
           body: |
-            Image: ${{ github.event.inputs.name }}
-            Variant: ${{ github.event.inputs.variant }}
-            Version: ${{ env.IMAGE_VERSION }}
-            URI: ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VARIANT_VERSION }}
-            URI: ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}
+            Image: `${{ github.event.inputs.name }}`
+            Variant: `${{ github.event.inputs.variant }}`
+            Version: `${{ env.IMAGE_VERSION }}`
+            URI: `ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VARIANT_VERSION }}`
+            URI: `ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}`
