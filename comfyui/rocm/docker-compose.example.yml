@@ -15,14 +15,11 @@ services:
       PYTORCH_ROCM_ARCH: gfx1100
       TZ: Etc/UTC
       COMFYUI_LISTEN: 0.0.0.0
-    command: >
-
     group_add:
       - video
       - render
     ports:
       - 8188:8188
-
     restart: unless-stopped
     security_opt:
       - seccomp:unconfined
