@@ -13,4 +13,4 @@ python3 main.py \
     --listen ${COMFYUI_LISTEN} \
     --base-directory ${COMFYUI_BASE_DIR} \
     --database-url ${COMFYUI_DB_URL} \
-    "@"
+    "$@"
