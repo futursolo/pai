@@ -25,7 +25,6 @@ FROM ${ROCM_IMAGE} AS build-rocm
 
 WORKDIR /opt/rocm/lib
 
-COPY --from=build-rocm-extras /opt/rocm/lib/rocblas/ /opt/rocm/lib/rocblas/
 COPY --from=build-rocm-extras /opt/rocm-extras-lib/ /opt/rocm-extras-lib/
 
 RUN cp -av /opt/rocm-extras-lib/* /opt/rocm/lib/
@@ -58,7 +57,7 @@ RUN cp -av *.txt /opt/koboldcpp/dist/
 
 WORKDIR /opt/koboldcpp/dist
 RUN chmod +x ./koboldcpp.py
-RUN ln -s /koboldcpp.py ./koboldcpp
+RUN ln -s ./koboldcpp.py ./koboldcpp
 
 FROM ubuntu:24.04 AS build-base
 
@@ -66,6 +65,7 @@ COPY --from=build-rocm /opt/amdgpu /opt/amdgpu
 COPY --from=build-rocm /opt/rocm/bin /opt/rocm/bin
 COPY --from=build-rocm /opt/rocm/libexec /opt/rocm/libexec
 COPY --from=build-rocm /opt/rocm/lib /opt/rocm/lib
+COPY --from=build-rocm-extras /opt/rocm/lib/rocblas/ /opt/rocm/lib/rocblas/
 
 RUN  --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
