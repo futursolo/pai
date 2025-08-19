@@ -1,7 +1,6 @@
 ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-24.04:6.4.3-complete
 ARG ROCM_IMAGE=rocm/dev-ubuntu-24.04:6.4.3
 ARG KOBOLDCPP_ROCM_VERSION=v1.97.4.yr0-ROCm
-ARG BASE_IMAGE=build-base
 
 FROM bitnami/git AS build-git
 
@@ -59,7 +58,7 @@ RUN cp -av *.txt /opt/koboldcpp/dist/
 
 WORKDIR /opt/koboldcpp/dist
 RUN chmod +x ./koboldcpp.py
-RUN ln -s /opt/koboldcpp/dist/koboldcpp ./koboldcpp.py
+RUN ln -s /koboldcpp.py ./koboldcpp
 
 FROM ubuntu:24.04 AS build-base
 
@@ -76,7 +75,7 @@ RUN  --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
     /tmp/_build/apt-install-rocminfo-deps.sh && \
     /tmp/_build/create-docker-user.sh
 
-FROM ${BASE_IMAGE} AS build-final
+FROM build-base AS build-final
 
 COPY --from=build-koboldcpp /opt/koboldcpp/dist /opt/koboldcpp
 
