@@ -63,18 +63,18 @@ RUN ln -s /opt/koboldcpp/dist/koboldcpp ./koboldcpp.py
 
 FROM ubuntu:24.04 AS build-base
 
+COPY --from=build-rocm /opt/amdgpu /opt/amdgpu
+COPY --from=build-rocm /opt/rocm/bin /opt/rocm/bin
+COPY --from=build-rocm /opt/rocm/libexec /opt/rocm/libexec
+COPY --from=build-rocm /opt/rocm/lib /opt/rocm/lib
+
 RUN  --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     /tmp/_build/apt-pre.sh && \
     /tmp/_build/apt-install-python3-minimal.sh && \
-    /tmp/_build/common/scripts/apt-install-rocminfo-deps.sh && \
+    /tmp/_build/apt-install-rocminfo-deps.sh && \
     /tmp/_build/create-docker-user.sh
-
-COPY --from=build-rocm /opt/amdgpu /opt/amdgpu
-COPY --from=build-rocm /opt/rocm/lib /opt/rocm/lib
-COPY --from=build-rocm /opt/rocm/bin /opt/rocm/bin
-COPY --from=build-rocm /opt/rocm/libexec /opt/rocm/libexec
 
 FROM ${BASE_IMAGE} AS build-final
 
