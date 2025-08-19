@@ -18,7 +18,7 @@ USER root
 RUN mkdir -p /opt/rocm-extras-lib/
 RUN cp -av /opt/rocm/lib/libhipblas.so* /opt/rocm-extras-lib/
 RUN cp -av /opt/rocm/lib/librocblas.so* /opt/rocm-extras-lib/
-RUN cp -av /opt/rocm/lib/libroresolver.so* /opt/rocm-extras-lib/
+RUN cp -av /opt/rocm/lib/librocsolver.so* /opt/rocm-extras-lib/
 
 FROM ${ROCM_IMAGE} AS build-rocm
 
