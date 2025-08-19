@@ -1,7 +1,13 @@
+# Conda is not used as it is too heavy for dependency management
+#in a containerised environment. We can install any non-Python dependencies globally.
+
+# A VirtualEnv with PyTorch is created at `/opt/pytorch-env/`.
+# You can link PyTorch dependencies to new virtual environments with:
+# `/common/scripts/python3-link-parent-venv.sh [parent env]` after activating the child env.
+
 ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-24.04:6.4.2-complete
 ARG ROCM_IMAGE=rocm/dev-ubuntu-24.04:6.4.2
 
-ARG COMFYUI_VERSION=v0.3.50
 ARG PYTORCH_ENV_VERSION=v2.6.0-rocm-v6.4.2
 
 FROM ${ROCM_IMAGE} AS build-rocm
