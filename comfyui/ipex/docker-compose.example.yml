@@ -4,26 +4,30 @@ name: example-comfyui
 services:
   comfyui:
     build:
-      dockerfile: ./comfyui/rocm/Dockerfile
+      dockerfile: ./comfyui/ipex/Dockerfile
       context: ../..
-    image: ghcr.io/futursolo/portable-ai/comfyui:rocm
+    image: ghcr.io/futursolo/portable-ai/comfyui:ipex
     devices:
       - /dev/dri:/dev/dri
-      - /dev/kfd:/dev/kfd
     environment:
-      HSA_OVERRIDE_GFX_VERSION: 11.0.0
-      PYTORCH_ROCM_ARCH: gfx1100
       TZ: Etc/UTC
       COMFYUI_LISTEN: 0.0.0.0
     group_add:
       - video
-      - render
     ports:
       - 8188:8188
     restart: unless-stopped
     security_opt:
       - seccomp:unconfined
+
+    # WSL Only
+    privileged: true
+
     volumes:
+
+      # WSL Only
+      - /usr/lib/wsl:/usr/lib/wsl
+
       - read_only: false
         source: ../../test-data/comfyui
         target: /home/docker-user/data
