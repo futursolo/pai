@@ -1,4 +1,4 @@
-ARG PYTORCH_BASE_IMAGE=ghcr.io/futursolo/portable-ai/base:pytorch-ipex
+ARG PYTORCH_BASE_IMAGE=ghcr.io/futursolo/portable-ai/base:pytorch-v2.6.0-rocm-v6.4.2-20250820
 ARG COMFYUI_VERSION=v0.3.51
 
 FROM bitnami/git:2.51.0 AS build-git
