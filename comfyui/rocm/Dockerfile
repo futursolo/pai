@@ -18,7 +18,7 @@ COPY --from=build-git --chown=root:root /opt/ComfyUI /opt/comfyui
 
 WORKDIR /opt/comfyui
 
-RUN --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
+RUN --mount=type=bind,source=./comfyui/common/scripts/,target=/tmp/_build/ \
     /tmp/_build/create-base-tpl.sh
 
 RUN rm -rf .git
