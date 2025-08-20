@@ -57,18 +57,4 @@ RUN  --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
     /tmp/_build/apt-pre.sh && \
     /tmp/_build/create-docker-user.sh
 
-# Temp
-RUN \
-    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
-    --mount=target=/var/cache/apt,type=cache,sharing=locked \
-    apt install -y xpu-smi
-
-# RUN apt-get update && \
-#     apt-get install -y --no-install-recommends \
-#         intel-opencl-icd=${ICD_VER} \
-#         intel-ocloc=${OCLOC_VER} \
-#         libze1=${LEVEL_ZERO_VER} \
-#         libze-dev=${LEVEL_ZERO_DEV_VER} \
-#         =${XPU_SMI_VER} && \
-
 COPY --from=build-pytorch --chown=root:root /opt/pytorch-env /opt/pytorch-env
