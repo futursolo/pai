@@ -8,6 +8,7 @@ on:
         type: choice
         options:
           - pytorch-rocm
+          - pytorch-ipex
 
 name: Build Base Container
 

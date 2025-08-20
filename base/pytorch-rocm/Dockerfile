@@ -1,5 +1,5 @@
 # Conda is not used as it is too heavy for dependency management
-#in a containerised environment. We can install any non-Python dependencies globally.
+# in a containerised environment. We can install any non-Python dependencies globally.
 
 # A VirtualEnv with PyTorch is created at `/opt/pytorch-env/`.
 # You can link PyTorch dependencies to new virtual environments with:

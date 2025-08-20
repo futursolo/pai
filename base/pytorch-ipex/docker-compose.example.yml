@@ -1,0 +1,26 @@
+---
+name: example-base-pytorch
+
+services:
+  base-pytorch:
+    build:
+      dockerfile: ./base/pytorch-ipex/Dockerfile
+      context: ../..
+    image: ghcr.io/futursolo/portable-ai/base:pytorch-ipex
+    # image: intelanalytics/ipex-llm-inference-cpp-xpu:latest
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      TZ: Etc/UTC
+    group_add:
+      - video
+
+    # WSL Only
+    privileged: true
+    # WSL Only
+    volumes:
+      - /usr/lib/wsl:/usr/lib/wsl
+
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
