@@ -28,7 +28,3 @@ services:
         source: ../../test-data/comfyui
         target: /home/docker-user/data
         type: bind
-      - read_only: false
-        source: ../../test-models
-        target: /home/docker-user/data/models
-        type: bind
