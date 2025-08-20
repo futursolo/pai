@@ -4,7 +4,7 @@ set -ex
 
 pip install --index-url https://download.pytorch.org/whl/xpu \
     torch==2.8.0 \
-    torchvision==2.8.0 \
+    torchvision==0.23.0 \
     torchaudio==2.8.0
 
 pip install --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us/ \

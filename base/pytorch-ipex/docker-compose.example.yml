@@ -4,19 +4,15 @@ name: example-base-pytorch
 services:
   base-pytorch:
     build:
-      dockerfile: ./base/pytorch-rocm/Dockerfile
+      dockerfile: ./base/pytorch-ipex/Dockerfile
       context: ../..
-    image: ghcr.io/futursolo/portable-ai/base:pytorch-v2.6.0-rocm-v6.4.2
+    image: ghcr.io/futursolo/portable-ai/base:pytorch-ipex
     devices:
       - /dev/dri:/dev/dri
-      - /dev/kfd:/dev/kfd
     environment:
-      HSA_OVERRIDE_GFX_VERSION: 11.0.0
-      PYTORCH_ROCM_ARCH: gfx1100
       TZ: Etc/UTC
     group_add:
       - video
-      - render
     restart: unless-stopped
     security_opt:
       - seccomp:unconfined

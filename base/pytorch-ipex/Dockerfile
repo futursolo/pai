@@ -31,18 +31,20 @@ RUN --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     /tmp/_build/apt-install-ipex-deps.sh
 
+RUN --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
+    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    /tmp/_build/apt-install-python3-dev.sh
+
 FROM build-ipex-base AS build-pytorch
 
 ARG PYTORCH_ENV_VERSION
 
 USER root
 
-RUN --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
-    /tmp/_build/apt-install-python3-dev.sh
-
 RUN python3 -m venv /opt/pytorch-env/
 
-RUN --mount=type=bind,source=./base/pytorch-rocm/scripts/,target=/tmp/_build/ \
+RUN --mount=type=bind,source=./base/pytorch-ipex/scripts/,target=/tmp/_build/ \
     env \
     PATH="/opt/pytorch-env/bin:$PATH" \
     /tmp/_build/python3.12-install-pytorch-${PYTORCH_ENV_VERSION}.sh
@@ -53,7 +55,20 @@ RUN  --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     /tmp/_build/apt-pre.sh && \
-    /tmp/_build/apt-install-python3-dev.sh && \
     /tmp/_build/create-docker-user.sh
+
+# Temp
+RUN \
+    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    apt install -y xpu-smi
+
+# RUN apt-get update && \
+#     apt-get install -y --no-install-recommends \
+#         intel-opencl-icd=${ICD_VER} \
+#         intel-ocloc=${OCLOC_VER} \
+#         libze1=${LEVEL_ZERO_VER} \
+#         libze-dev=${LEVEL_ZERO_DEV_VER} \
+#         =${XPU_SMI_VER} && \
 
 COPY --from=build-pytorch --chown=root:root /opt/pytorch-env /opt/pytorch-env
