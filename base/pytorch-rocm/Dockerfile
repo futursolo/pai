@@ -3,7 +3,7 @@
 
 # A VirtualEnv with PyTorch is created at `/opt/pytorch-env/`.
 # You can link PyTorch dependencies to new virtual environments with:
-# `/common/scripts/python3-link-parent-venv.sh [parent env]` after activating the child env.
+# `/common/scripts/python3-link-parent-env.sh [parent env]` after activating the child env.
 
 ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-24.04:6.4.2-complete
 ARG ROCM_IMAGE=rocm/dev-ubuntu-24.04:6.4.2
