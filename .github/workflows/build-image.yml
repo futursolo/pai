@@ -16,6 +16,7 @@ on:
         options:
           - rocm
           - vulkan
+          - ipex
 
 name: Build Container
 
