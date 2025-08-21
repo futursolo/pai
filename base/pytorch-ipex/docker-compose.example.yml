@@ -1,8 +1,8 @@
 ---
-name: example-base-pytorch
+name: example-base
 
 services:
-  base-pytorch:
+  pytorch-ipex:
     build:
       dockerfile: ./base/pytorch-ipex/Dockerfile
       context: ../..
