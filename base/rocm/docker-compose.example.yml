@@ -2,11 +2,11 @@
 name: example-base
 
 services:
-  pytorch-rocm:
+  rocm:
     build:
-      dockerfile: ./base/pytorch-rocm/Dockerfile
+      dockerfile: ./base/rocm/Dockerfile
       context: ../..
-    image: ghcr.io/futursolo/portable-ai/base:pytorch-rocm
+    image: ghcr.io/futursolo/portable-ai/base:rocm
     devices:
       - /dev/dri:/dev/dri
       - /dev/kfd:/dev/kfd

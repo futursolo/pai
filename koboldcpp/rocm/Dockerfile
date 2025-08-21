@@ -1,5 +1,5 @@
 ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-24.04:6.4.3-complete
-ARG ROCM_IMAGE=rocm/dev-ubuntu-24.04:6.4.3
+ARG BLAS_ROCM_BASE_IMAGE=ghcr.io/futursolo/portable-ai/base:blas-rocm-v6.4.3-does-not-exist
 ARG KOBOLDCPP_ROCM_VERSION=v1.97.4.yr0-ROCm
 
 FROM bitnami/git AS build-git
@@ -10,24 +10,6 @@ WORKDIR /opt/
 RUN git clone --depth 1 \
     --branch ${KOBOLDCPP_ROCM_VERSION} \
     https://github.com/YellowRoseCx/koboldcpp-rocm.git
-
-FROM ${ROCM_DEV_IMAGE} AS build-rocm-extras
-
-USER root
-
-RUN mkdir -p /opt/rocm-extras-lib/
-RUN cp -av /opt/rocm/lib/libhipblas.so* /opt/rocm-extras-lib/
-RUN cp -av /opt/rocm/lib/librocblas.so* /opt/rocm-extras-lib/
-RUN cp -av /opt/rocm/lib/librocsolver.so* /opt/rocm-extras-lib/
-RUN cp -av /opt/rocm/lib/libhipblaslt.so* /opt/rocm-extras-lib/
-
-FROM ${ROCM_IMAGE} AS build-rocm
-
-WORKDIR /opt/rocm/lib
-
-COPY --from=build-rocm-extras /opt/rocm-extras-lib/ /opt/rocm-extras-lib/
-
-RUN cp -av /opt/rocm-extras-lib/* /opt/rocm/lib/
 
 FROM ${ROCM_DEV_IMAGE} AS build-koboldcpp
 
@@ -59,23 +41,7 @@ WORKDIR /opt/koboldcpp/dist
 RUN chmod +x ./koboldcpp.py
 RUN ln -s ./koboldcpp.py ./koboldcpp
 
-FROM ubuntu:24.04 AS build-base
-
-COPY --from=build-rocm /opt/amdgpu /opt/amdgpu
-COPY --from=build-rocm /opt/rocm/bin /opt/rocm/bin
-COPY --from=build-rocm /opt/rocm/libexec /opt/rocm/libexec
-COPY --from=build-rocm /opt/rocm/lib /opt/rocm/lib
-COPY --from=build-rocm-extras /opt/rocm/lib/rocblas/ /opt/rocm/lib/rocblas/
-
-RUN  --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
-    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
-    --mount=target=/var/cache/apt,type=cache,sharing=locked \
-    /tmp/_build/apt-pre.sh && \
-    /tmp/_build/apt-install-python3-minimal.sh && \
-    /tmp/_build/apt-install-rocminfo-deps.sh && \
-    /tmp/_build/create-docker-user.sh
-
-FROM build-base AS build-final
+FROM ${BLAS_ROCM_BASE_IMAGE} AS build-final
 
 COPY --from=build-koboldcpp /opt/koboldcpp/dist /opt/koboldcpp
 
