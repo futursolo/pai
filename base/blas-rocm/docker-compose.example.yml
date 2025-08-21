@@ -9,14 +9,14 @@ services:
     image: ghcr.io/futursolo/portable-ai/base:blas-rocm
     devices:
       - /dev/dri:/dev/dri
-    #  - /dev/kfd:/dev/kfd
+      - /dev/kfd:/dev/kfd
     environment:
       HSA_OVERRIDE_GFX_VERSION: 11.0.0
       PYTORCH_ROCM_ARCH: gfx1100
       TZ: Etc/UTC
     group_add:
       - video
-    #  - render
+      - render
     restart: unless-stopped
     security_opt:
       - seccomp:unconfined
