@@ -16,9 +16,9 @@
 
   Tensors and Dynamic neural networks in Python with strong GPU acceleration.
 
-- `intel`: Supports Intel Graphcis with IPEX Support
+- `intel`: Supports Intel Graphcis with SYCL Support
 
-  **Intel OenAPI OpenCL and Level-Zero Base Image**
+  **Intel OneAPI OpenCL and Level-Zero Base Image**
 
   Base Image for Intel Containers.
 
