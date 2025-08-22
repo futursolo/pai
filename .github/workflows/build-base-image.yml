@@ -9,6 +9,7 @@ on:
         options:
           - pytorch-rocm
           - pytorch-ipex
+          - intel
 
 name: Build Base Container
 

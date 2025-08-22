@@ -1,0 +1,20 @@
+---
+name: example-base
+
+services:
+  intel:
+    build:
+      dockerfile: ./base/intel/Dockerfile
+      context: ../..
+    image: ghcr.io/futursolo/portable-ai/base:intel
+    devices:
+      - /dev/dri
+    group_add:
+      - video
+    restart: unless-stopped
+
+    # WSL Only
+    privileged: true
+    # WSL Only
+    volumes:
+      - /usr/lib/wsl:/usr/lib/wsl
