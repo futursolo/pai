@@ -4,33 +4,25 @@ name: example-ollama
 services:
   ollama:
     build:
-      dockerfile: ./ollama/sycl/Dockerfile
+      dockerfile: ./ollama/intel/Dockerfile
       context: ../..
-    image: ghcr.io/futursolo/portable-ai/ollama:sycl
+    image: ghcr.io/futursolo/portable-ai/ollama:intel
     devices:
       - /dev/dri
     environment:
-      - TZ=Etc/UTC
       - ZES_ENABLE_SYSMAN=1
       - SYCL_PI_LEVEL_ZERO_USE_IMMEDIATE_COMMANDLISTS=1
 
       # Single GPU
       - ONEAPI_DEVICE_SELECTOR=level_zero:0
 
-      # Multiple GPU
+      # Multiple GPUs
       # - ONEAPI_DEVICE_SELECTOR="level_zero:0;level_zero:1"
     group_add:
       - video
     ports:
       - 5001:5001
     restart: unless-stopped
-    command: >
-      --contextsize 8192
-      --model /home/docker-user/models/Llama-3.3-70B-Instruct-Q4_K_M.gguf
-      --usevulkan --port 5001 --quiet
-      --password mypassword
-    security_opt:
-      - seccomp:unconfined
 
     # WSL Only
     privileged: true
@@ -39,7 +31,7 @@ services:
       # WSL Only
       - /usr/lib/wsl:/usr/lib/wsl
 
-      - read_only: true
-        source: ../../test-models
-        target: /home/docker-user/models
+      - read_only: false
+        source: ../../test-data/ollama
+        target: /home/docker-user/.ollama
         type: bind
