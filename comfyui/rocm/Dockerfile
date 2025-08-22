@@ -18,7 +18,7 @@ COPY --from=build-git --chown=root:root /opt/ComfyUI /opt/comfyui
 
 WORKDIR /opt/comfyui
 
-RUN --mount=type=bind,source=./comfyui/common/scripts/,target=/tmp/_build/ \
+RUN --mount=type=bind,source=./comfyui/_scripts/,target=/tmp/_build/ \
     /tmp/_build/create-base-tpl.sh
 
 RUN rm -rf .git
@@ -26,7 +26,7 @@ RUN rm -rf .git
 FROM ${PYTORCH_BASE_IMAGE} AS build-comfyui-env
 
 RUN python3 -m venv /opt/comfyui-env/
-RUN --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
+RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
     env \
     PATH="/opt/comfyui-env/bin:$PATH" \
     /tmp/_build/python3-link-parent-env.sh /opt/pytorch-env
@@ -43,7 +43,7 @@ COPY --from=build-comfyui --chown=root:root /opt/comfyui /opt/comfyui
 COPY --from=build-comfyui-env --chown=root:root /opt/comfyui-env /opt/comfyui-env
 COPY --from=build-comfyui --chown=docker-user:docker-user /opt/comfyui-base-tpl /home/docker-user/data
 
-COPY ./comfyui/common/scripts/entrypoint.sh /
+COPY ./comfyui/_scripts/entrypoint.sh /
 
 ENV PATH=/opt/comfyui-env/bin/:/opt/rocm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
