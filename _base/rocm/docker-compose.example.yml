@@ -2,11 +2,11 @@
 name: example-base
 
 services:
-  blas-rocm:
+  rocm:
     build:
-      dockerfile: ./base/blas-rocm/Dockerfile
+      dockerfile: ./_base/rocm/Dockerfile
       context: ../..
-    image: ghcr.io/futursolo/portable-ai/base:blas-rocm
+    image: ghcr.io/futursolo/portable-ai/base:rocm
     devices:
       - /dev/dri:/dev/dri
       - /dev/kfd:/dev/kfd

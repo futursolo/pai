@@ -4,7 +4,7 @@ name: example-koboldcpp
 services:
   koboldcpp:
     build:
-      dockerfile: ./Dockerfile
+      dockerfile: ./koboldcpp/vulkan/Dockerfile
       context: ../..
     image: ghcr.io/futursolo/portable-ai/koboldcpp:v1.97.4-vulkan
     devices:

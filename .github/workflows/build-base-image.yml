@@ -63,7 +63,7 @@ jobs:
 
       - name: Read Version
         run: echo "BASE_IMAGE_VERSION=$(cat .image-version)" >> $GITHUB_ENV
-        working-directory: "base/${{ github.event.inputs.variant }}"
+        working-directory: "_base/${{ github.event.inputs.variant }}"
 
       - name: Define Versions (Release)
         if: ${{ github.ref == 'refs/heads/master' }}
@@ -85,7 +85,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: base/${{ github.event.inputs.variant }}/Dockerfile
+          file: _base/${{ github.event.inputs.variant }}/Dockerfile
           push: true
           tags: |
             ghcr.io/futursolo/portable-ai/base:${{ env.IMAGE_VERSION }}
