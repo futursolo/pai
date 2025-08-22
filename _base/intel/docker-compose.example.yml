@@ -4,7 +4,7 @@ name: example-base
 services:
   intel:
     build:
-      dockerfile: ./base/intel/Dockerfile
+      dockerfile: ./_base/intel/Dockerfile
       context: ../..
     image: ghcr.io/futursolo/portable-ai/base:intel
     devices:
