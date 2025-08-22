@@ -18,9 +18,9 @@ Vendor drivers are optional.
 
 The following variants are usually provided:
 
-- `vulkan` (Any Vulkan Compatible GPUs)
-- `intel` / `ipex` (Intel Arc)
-- `rocm` (AMD Radeon)
+- vulkan (Any Vulkan Compatible GPUs)
+- intel / ipex (Intel Arc)
+- rocm (AMD Radeon)
 
 \* CUDA is not supported because I currently do not have any NVIDIA Graphics Cards to test CUDA-based images
 and CUDA-based images are usually already available from other sources.
