@@ -3,7 +3,7 @@
 
 # A VirtualEnv with PyTorch is created at `/opt/pytorch-env/`.
 # You can link PyTorch dependencies to new virtual environments with:
-# `/common/scripts/python3-link-parent-env.sh [parent env]` after activating the child env.
+# `/_base/_scripts/python3-link-parent-env.sh [parent env]` after activating the child env.
 
 ARG INTEL_BASE_IMAGE=ghcr.io/futursolo/portable-ai/base:intel-20250822
 
@@ -27,7 +27,7 @@ RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
 
 RUN python3 -m venv /opt/pytorch-env/
 
-RUN --mount=type=bind,source=./base/pytorch-ipex/scripts/,target=/tmp/_build/ \
+RUN --mount=type=bind,source=./base/pytorch-ipex/_scripts/,target=/tmp/_build/ \
     env \
     PATH="/opt/pytorch-env/bin:$PATH" \
     /tmp/_build/python3.12-install-pytorch-${PYTORCH_ENV_VERSION}.sh
