@@ -26,7 +26,7 @@ USER root
 
 COPY --from=build-ollama /tmp/ollama/ollama /opt/ollama/
 
-COPY ./ollama/intel/scripts/ollama-shim /bin/ollama
+COPY ./ollama/intel/_scripts/ollama-shim /bin/ollama
 
 USER docker-user
 
