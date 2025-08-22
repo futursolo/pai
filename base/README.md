@@ -2,19 +2,25 @@
 
 ### Variants
 
-- pytorch-rocm: Supports AMD Radeon Graphics with ROCm Support
+- `pytorch-rocm`: Supports AMD Radeon Graphics with ROCm Support
 
   **Pytorch w/ ROCm Backend**\
   Base Repository: https://github.com/pytorch/pytorch
 
   Tensors and Dynamic neural networks in Python with strong GPU acceleration.
 
-- pytorch-ipex: Supports Intel Graphcis with IPEX Support
+- `pytorch-ipex`: Supports Intel Graphcis with IPEX Support
 
   **Pytorch w/ IPEX Backend**\
   Base Repository: https://github.com/pytorch/pytorch
 
   Tensors and Dynamic neural networks in Python with strong GPU acceleration.
+
+- `intel`: Supports Intel Graphcis with IPEX Support
+
+  **Intel OenAPI OpenCL and Level-Zero Base Image**
+
+  Base Image for Intel Containers.
 
 ### Usage
 

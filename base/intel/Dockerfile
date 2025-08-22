@@ -21,4 +21,6 @@ RUN --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
 RUN --mount=type=bind,source=./base/intel/scripts/,target=/tmp/_build/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
-    /tmp/_build/apt-install-intel-sycl-deps.sh
+    /tmp/_build/apt-install-intel-deps.sh
+
+ENV TZ=Etc/UTC
