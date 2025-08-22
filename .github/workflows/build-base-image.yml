@@ -10,6 +10,7 @@ on:
           - pytorch-rocm
           - pytorch-ipex
           - intel
+          - vulkan
 
 name: Build Base Container
 

@@ -1,0 +1,16 @@
+---
+name: example-base
+
+services:
+  vulkan:
+    build:
+      dockerfile: ./_base/vulkan/Dockerfile
+      context: ../..
+    image: ghcr.io/futursolo/portable-ai/base:vulkan
+    devices:
+      - /dev/dri:/dev/dri
+    group_add:
+      - video
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
