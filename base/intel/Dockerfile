@@ -1,24 +1,3 @@
-ARG IPEX_LLM_VERSION=v2.3.0-nightly
-ARG OLLAMA_IPEX_LLM_VERSION=2.3.0b20250725
-
-FROM ubuntu:24.04 AS build-ollama
-
-ARG IPEX_LLM_VERSION
-ARG OLLAMA_IPEX_LLM_VERSION
-
-RUN mkdir /tmp/ollama/
-
-WORKDIR /tmp/ollama/
-
-ADD https://github.com/ipex-llm/ipex-llm/releases/download/${IPEX_LLM_VERSION}/ollama-ipex-llm-${OLLAMA_IPEX_LLM_VERSION}-ubuntu.tgz \
-    /tmp/ollama/
-
-RUN tar -zxvf *.tgz
-
-RUN rm -rf *.tgz
-
-RUN mv ollama-* ollama
-
 FROM ubuntu:24.04 AS build-final
 
 RUN  --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
@@ -29,7 +8,7 @@ RUN --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     /tmp/_build/apt-pre.sh
 
-RUN --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
+RUN --mount=type=bind,source=./base/intel/scripts/,target=/tmp/_build/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     /tmp/_build/apt-add-intel-repo.sh
@@ -39,23 +18,7 @@ RUN --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     /tmp/_build/apt-pre.sh
 
-RUN --mount=type=bind,source=./common/scripts/,target=/tmp/_build/ \
+RUN --mount=type=bind,source=./base/intel/scripts/,target=/tmp/_build/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
-    /tmp/_build/apt-install-ipex-deps.sh
-
-COPY --from=build-ollama /tmp/ollama/ollama /opt/ollama/
-
-USER docker-user
-
-RUN mkdir -p /home/docker-user/.ollama
-
-VOLUME [ "/home/docker-user/.ollama" ]
-
-WORKDIR /opt/ollama/
-
-SHELL [ "/bin/bash", "-c" ]
-
-ENV GIN_MODE=release
-
-ENTRYPOINT /opt/ollama/ollama serve
+    /tmp/_build/apt-install-intel-sycl-deps.sh

@@ -8,9 +8,17 @@ services:
       context: ../..
     image: ghcr.io/futursolo/portable-ai/ollama:sycl
     devices:
-      - /dev/dri:/dev/dri
+      - /dev/dri
     environment:
-      TZ: Etc/UTC
+      - TZ=Etc/UTC
+      - ZES_ENABLE_SYSMAN=1
+      - SYCL_PI_LEVEL_ZERO_USE_IMMEDIATE_COMMANDLISTS=1
+
+      # Single GPU
+      - ONEAPI_DEVICE_SELECTOR=level_zero:0
+
+      # Multiple GPU
+      # - ONEAPI_DEVICE_SELECTOR="level_zero:0;level_zero:1"
     group_add:
       - video
     ports:
@@ -23,7 +31,14 @@ services:
       --password mypassword
     security_opt:
       - seccomp:unconfined
+
+    # WSL Only
+    privileged: true
+
     volumes:
+      # WSL Only
+      - /usr/lib/wsl:/usr/lib/wsl
+
       - read_only: true
         source: ../../test-models
         target: /home/docker-user/models
