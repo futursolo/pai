@@ -6,6 +6,7 @@ Get up and running with OpenAI gpt-oss, DeepSeek-R1, Gemma 3 and other models.
 
 - intel: Supports Intel Graphcis with SYCL Support
 
+  **IPEX-LLM Optimised Build of Ollama**
   Base Repository: https://github.com/intel/ipex-llm
 
 ### Usage
