@@ -4,7 +4,7 @@ name: example-base
 services:
   pytorch-rocm:
     build:
-      dockerfile: ./base/pytorch-rocm/Dockerfile
+      dockerfile: ./_base/pytorch-rocm/Dockerfile
       context: ../..
     image: ghcr.io/futursolo/portable-ai/base:pytorch-rocm
     devices:
