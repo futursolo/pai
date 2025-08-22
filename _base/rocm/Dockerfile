@@ -24,3 +24,5 @@ RUN  --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/ \
 
 COPY --from=build-rocm /opt/amdgpu/ /opt/amdgpu/
 COPY --from=build-rocm /opt/rocm/ /opt/rocm/
+
+ENV TZ=Etc/UTC
