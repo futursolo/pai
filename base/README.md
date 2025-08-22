@@ -22,6 +22,18 @@
 
   Base Image for Intel Containers.
 
+- `rocm-blas`: Supports AMD Radeon Graphics with ROCm Support
+
+  **ROCm w/ BLAS Libraries**
+
+  Same as `rocm` but with BLAS files added.
+
+- `rocm`: Supports AMD Radeon Graphics with ROCm Support
+
+  **Radeon Open Compute Base Image**
+
+  Base Image for AMD Containers.
+
 ### Usage
 
 Variants under this image are used as base images during the building process or as part of the final image.

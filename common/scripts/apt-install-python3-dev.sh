@@ -2,7 +2,7 @@
 
 set -ex
 
-apt-get install -y python3-full \
+apt-get install -y \
     python3-pip \
     python3-venv \
     python3-dev
