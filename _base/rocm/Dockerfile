@@ -14,7 +14,7 @@ RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     /tmp/_build/apt-install-python3.sh
 
-RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+RUN  --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     /tmp/_build/apt-install-rocminfo-deps.sh
