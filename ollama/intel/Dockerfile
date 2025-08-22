@@ -26,6 +26,8 @@ USER root
 
 COPY --from=build-ollama /tmp/ollama/ollama /opt/ollama/
 
+COPY ./ollama/intel/scripts/ollama-shim /bin/ollama
+
 USER docker-user
 
 RUN mkdir -p /home/docker-user/.ollama
@@ -35,8 +37,6 @@ VOLUME [ "/home/docker-user/.ollama" ]
 WORKDIR /opt/ollama/
 
 SHELL [ "/bin/bash", "-c" ]
-
-RUN ln -s /opt/ollama/ollama /bin/
 
 ENTRYPOINT [ "/bin/ollama" ]
 
