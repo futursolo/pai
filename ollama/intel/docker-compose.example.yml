@@ -1,0 +1,37 @@
+---
+name: example-ollama
+
+services:
+  ollama:
+    build:
+      dockerfile: ./ollama/intel/Dockerfile
+      context: ../..
+    image: ghcr.io/futursolo/portable-ai/ollama:intel
+    devices:
+      - /dev/dri
+    environment:
+      - ZES_ENABLE_SYSMAN=1
+      - SYCL_PI_LEVEL_ZERO_USE_IMMEDIATE_COMMANDLISTS=1
+
+      # Single GPU
+      - ONEAPI_DEVICE_SELECTOR=level_zero:0
+
+      # Multiple GPUs
+      # - ONEAPI_DEVICE_SELECTOR="level_zero:0;level_zero:1"
+    group_add:
+      - video
+    ports:
+      - 5001:5001
+    restart: unless-stopped
+
+    # WSL Only
+    privileged: true
+
+    volumes:
+      # WSL Only
+      - /usr/lib/wsl:/usr/lib/wsl
+
+      - read_only: false
+        source: ../../test-data/ollama
+        target: /home/docker-user/.ollama
+        type: bind

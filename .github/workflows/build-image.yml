@@ -9,6 +9,7 @@ on:
         options:
           - koboldcpp
           - comfyui
+          - ollama
       variant:
         description: "Image Variant"
         required: true
@@ -17,6 +18,7 @@ on:
           - rocm
           - vulkan
           - ipex
+          - intel
 
 name: Build Container
 

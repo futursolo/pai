@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -e
+
+# This is a shim script to make sure ollama can be linked to other locations.
+
+/opt/ollama/ollama "$@"
