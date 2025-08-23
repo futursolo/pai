@@ -1,4 +1,4 @@
-ARG VULKAN_BASE_IMAGE=ghcr.io/futursolo/portable-ai/base:vulkan-20250822
+ARG VULKAN_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:vulkan-20250823
 
 ARG KOBOLDCPP_VERSION=v1.97.4
 
@@ -18,7 +18,7 @@ FROM ${VULKAN_BASE_IMAGE} AS build-final
 RUN mkdir -p /opt/koboldcpp
 COPY --from=build-koboldcpp --chown=root:root /tmp/koboldcpp-linux-x64-nocuda /opt/koboldcpp/koboldcpp
 
-USER docker-user
+USER pai-user
 
 WORKDIR /opt/koboldcpp
 
