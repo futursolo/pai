@@ -10,8 +10,6 @@ services:
     # image: intelanalytics/ipex-llm-inference-cpp-xpu:latest
     devices:
       - /dev/dri:/dev/dri
-    environment:
-      TZ: Etc/UTC
     group_add:
       - video
 
