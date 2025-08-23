@@ -6,7 +6,7 @@ services:
     build:
       dockerfile: ./_base/vulkan/Dockerfile
       context: ../..
-    image: ghcr.io/futursolo/portable-ai/base:vulkan
+    image: ghcr.io/futursolo/pai-apps/base:vulkan
     devices:
       - /dev/dri:/dev/dri
     group_add:
