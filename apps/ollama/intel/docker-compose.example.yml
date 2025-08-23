@@ -21,7 +21,7 @@ services:
     group_add:
       - video
     ports:
-      - 5001:5001
+      - 11434:11434
     restart: unless-stopped
 
     # WSL Only
@@ -33,5 +33,5 @@ services:
 
       - read_only: false
         source: ../../test-data/ollama
-        target: /mnt/data
+        target: /mnt/ollama
         type: bind

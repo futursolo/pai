@@ -28,14 +28,15 @@ COPY --from=build-ollama /tmp/ollama/ollama /opt/ollama/
 
 COPY ./ollama/intel/_scripts/ollama-shim /bin/ollama
 
-RUN mkdir -p /mnt/data
-RUN chown pai-user:pai-user /mnt/data
+RUN mkdir -p /mnt/ollama
+RUN chown pai-user:pai-user /mnt/ollama
 
 USER pai-user
 
-ENV OLLAMA_MODELS=/mnt/data
+ENV OLLAMA_MODELS=/mnt/ollama
+ENV OLLAMA_HOST="0.0.0.0:11434"
 
-VOLUME [ "/home/docker-user/.ollama" ]
+VOLUME [ "/mnt/ollama" ]
 
 WORKDIR /opt/ollama/
 
