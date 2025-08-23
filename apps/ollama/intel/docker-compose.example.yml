@@ -9,6 +9,7 @@ services:
     image: ghcr.io/futursolo/pai-apps/ollama:intel
     devices:
       - /dev/dri
+    shm_size: 16G
     environment:
       - ZES_ENABLE_SYSMAN=1
       - SYCL_PI_LEVEL_ZERO_USE_IMMEDIATE_COMMANDLISTS=1
@@ -32,6 +33,6 @@ services:
       - /usr/lib/wsl:/usr/lib/wsl
 
       - read_only: false
-        source: ../../test-data/ollama
+        source: ../../../test-data/ollama
         target: /mnt/ollama
         type: bind

@@ -28,6 +28,6 @@ services:
       - seccomp:unconfined
     volumes:
       - read_only: true
-        source: ../../test-models
+        source: ../../../test-models
         target: /mnt/models
         type: bind

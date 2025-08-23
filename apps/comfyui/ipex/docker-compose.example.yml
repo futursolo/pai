@@ -9,6 +9,7 @@ services:
     image: ghcr.io/futursolo/pai-apps/comfyui:ipex
     devices:
       - /dev/dri
+    shm_size: 16G
     environment:
       COMFYUI_LISTEN: 0.0.0.0
     group_add:
@@ -28,6 +29,6 @@ services:
       - /usr/lib/wsl:/usr/lib/wsl
 
       - read_only: false
-        source: ../../test-data/comfyui
+        source: ../../../test-data/comfyui
         target: /mnt/comfyui
         type: bind
