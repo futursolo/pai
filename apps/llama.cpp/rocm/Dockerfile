@@ -17,6 +17,7 @@ FROM ${BLAS_ROCM_BASE_IMAGE} AS build-llama-cpp-env
 RUN python3 -m venv /opt/llama.cpp-env/
 
 COPY --from=build-git --chown=root:root /opt/llama.cpp/requirements.txt /tmp/requirements.txt
+COPY --from=build-git --chown=root:root /opt/llama.cpp/requirements /tmp/requirements
 
 RUN env \
     PATH="/opt/llama.cpp-env/bin:$PATH" \
