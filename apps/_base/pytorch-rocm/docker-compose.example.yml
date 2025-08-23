@@ -8,8 +8,8 @@ services:
       context: ../..
     image: ghcr.io/futursolo/pai-apps/base:pytorch-rocm
     devices:
-      - /dev/dri:/dev/dri
-      - /dev/kfd:/dev/kfd
+      - /dev/dri
+      - /dev/kfd
     environment:
       HSA_OVERRIDE_GFX_VERSION: 11.0.0
       PYTORCH_ROCM_ARCH: gfx1100
