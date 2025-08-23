@@ -4,16 +4,15 @@ name: example-comfyui
 services:
   comfyui:
     build:
-      dockerfile: ./comfyui/rocm/Dockerfile
-      context: ../..
-    image: ghcr.io/futursolo/portable-ai/comfyui:rocm
+      dockerfile: ./apps/comfyui/rocm/Dockerfile
+      context: ../../..
+    image: ghcr.io/futursolo/pai-apps/comfyui:rocm
     devices:
       - /dev/dri:/dev/dri
       - /dev/kfd:/dev/kfd
     environment:
       HSA_OVERRIDE_GFX_VERSION: 11.0.0
       PYTORCH_ROCM_ARCH: gfx1100
-      TZ: Etc/UTC
       COMFYUI_LISTEN: 0.0.0.0
     group_add:
       - video
@@ -26,5 +25,5 @@ services:
     volumes:
       - read_only: false
         source: ../../test-data/comfyui
-        target: /home/docker-user/data
+        target: /mnt/data
         type: bind
