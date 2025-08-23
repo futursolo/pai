@@ -6,10 +6,10 @@ services:
     build:
       dockerfile: ./_base/pytorch-ipex/Dockerfile
       context: ../..
-    image: ghcr.io/futursolo/portable-ai/base:pytorch-ipex
+    image: ghcr.io/futursolo/pai-apps/base:pytorch-ipex
     # image: intelanalytics/ipex-llm-inference-cpp-xpu:latest
     devices:
-      - /dev/dri:/dev/dri
+      - /dev/dri
     group_add:
       - video
 

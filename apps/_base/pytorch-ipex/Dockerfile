@@ -5,7 +5,7 @@
 # You can link PyTorch dependencies to new virtual environments with:
 # `/_base/_scripts/python3-link-parent-env.sh [parent env]` after activating the child env.
 
-ARG INTEL_BASE_IMAGE=ghcr.io/futursolo/portable-ai/base:intel-20250822
+ARG INTEL_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:intel-20250823
 
 ARG PYTORCH_ENV_VERSION=v2.8.0-ipex-v2.8.10
 
@@ -33,8 +33,5 @@ RUN --mount=type=bind,source=./_base/pytorch-ipex/_scripts/,target=/tmp/_build/ 
     /tmp/_build/python3.12-install-pytorch-${PYTORCH_ENV_VERSION}.sh
 
 FROM build-ipex-base AS build-final
-
-RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
-    /tmp/_build/create-docker-user.sh
 
 COPY --from=build-pytorch --chown=root:root /opt/pytorch-env /opt/pytorch-env
