@@ -28,13 +28,13 @@ and CUDA-based images are usually already available from other sources.
 ### Supported Apps
 
 - [KoboldCPP](./apps/koboldcpp/README.md)
-  - `rocm`:`ghcr.io/futursolo/portable-ai/koboldcpp:rocm`
-  - `vulkan`: `ghcr.io/futursolo/portable-ai/koboldcpp:vulkan`
+  - `rocm`:`ghcr.io/futursolo/pai-apps/koboldcpp:rocm`
+  - `vulkan`: `ghcr.io/futursolo/pai-apps/koboldcpp:vulkan`
 - [ComfyUI](./apps/comfyui/README.md)
-  - `rocm`: `ghcr.io/futursolo/portable-ai/comfyui:rocm`
-  - `ipex`: `ghcr.io/futursolo/portable-ai/comfyui:ipex`
+  - `rocm`: `ghcr.io/futursolo/pai-apps/comfyui:rocm`
+  - `ipex`: `ghcr.io/futursolo/pai-apps/comfyui:ipex`
 - [Ollama](./apps/ollama/README.md)
-  - `intel`: `ghcr.io/futursolo/portable-ai/ollama:intel`
+  - `intel`: `ghcr.io/futursolo/pai-apps/ollama:intel`
 
 ### Rootless Containers
 

@@ -7,10 +7,10 @@ Base Repository: https://github.com/comfyanonymous/ComfyUI
 ### Variants
 
 - `rocm`: Supports AMD Radeon Graphics with ROCm Support\
-  URI: `ghcr.io/futursolo/portable-ai/comfyui:rocm`
+  URI: `ghcr.io/futursolo/pai-apps/comfyui:rocm`
 
 - `ipex`: Supports Intel Graphics with IPEX Support\
-  URI: `ghcr.io/futursolo/portable-ai/comfyui:ipex`
+  URI: `ghcr.io/futursolo/pai-apps/comfyui:ipex`
 
 ### Usage
 
