@@ -14,6 +14,11 @@ FROM ${INTEL_BASE_IMAGE} AS build-ipex-base
 RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    /tmp/_build/apt-pre.sh
+
+RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
     /tmp/_build/apt-install-python3.sh
 
 FROM build-ipex-base AS build-pytorch
