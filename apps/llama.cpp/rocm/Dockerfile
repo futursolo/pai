@@ -57,6 +57,16 @@ RUN mkdir -p ./app/full \
 
 FROM ${BLAS_ROCM_BASE_IMAGE} AS build-final
 
+RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    /tmp/_build/apt-pre.sh
+
+RUN  --mount=type=bind,source=./llama.cpp/rocm/_scripts/,target=/tmp/_build/ \
+    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    /tmp/_build/apt-install-llama-cpp-deps.sh
+
 COPY --from=build-llama-cpp-env /opt/llama.cpp-env /opt/llama.cpp-env
 COPY --from=build-llama-cpp /opt/llama.cpp/app/lib /opt/llama.cpp
 COPY --from=build-llama-cpp /opt/llama.cpp/app/full /opt/llama.cpp

@@ -1,8 +1,8 @@
 ---
-name: example-koboldcpp
+name: example-llama-cpp
 
 services:
-  koboldcpp:
+  llama-cpp:
     build:
       dockerfile: ./llama.cpp/rocm/Dockerfile
       context: ../..
@@ -12,6 +12,10 @@ services:
       - /dev/kfd
     environment:
       HSA_OVERRIDE_GFX_VERSION: 11.0.0
+    command: >
+      --server
+      -m /mnt/models/Llama-3.3-70B-Instruct-Q4_K_M.gguf
+      -c 2048 -ngl 999 -mg 1 --port 8080
     group_add:
       - video
       - render

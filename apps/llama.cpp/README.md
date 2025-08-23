@@ -19,3 +19,5 @@ Comparing to Official Image, this image:
 
 1. Stores the app to `/opt/llama.cpp` instead of `/app`.
 2. Uses `pai-user` as the user to execute the container.
+3. Only an official `full` variant equivalent is provided.
+4. This image is built on a roughly weekly basis since llama.cpp releases very frequently.
