@@ -72,7 +72,7 @@ jobs:
 
       - name: Read Version
         run: echo "BASE_IMAGE_VERSION=$(cat .image-version)" >> $GITHUB_ENV
-        working-directory: "${{ github.event.inputs.name }}/${{ github.event.inputs.variant }}"
+        working-directory: "apps/${{ github.event.inputs.name }}/${{ github.event.inputs.variant }}"
 
       - name: Define Versions (Release)
         if: ${{ github.ref == 'refs/heads/master' }}
@@ -100,11 +100,11 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ${{ github.event.inputs.name }}/${{ github.event.inputs.variant }}/Dockerfile
+          file: apps/${{ github.event.inputs.name }}/${{ github.event.inputs.variant }}/Dockerfile
           push: true
           tags: |
-            ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}
-            ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VARIANT_VERSION }}
+            ghcr.io/futursolo/pai-apps/${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}
+            ghcr.io/futursolo/pai-apps/${{ github.event.inputs.name }}:${{ env.IMAGE_VARIANT_VERSION }}
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
@@ -118,5 +118,5 @@ jobs:
             Image: `${{ github.event.inputs.name }}`
             Variant: `${{ github.event.inputs.variant }}`
             Version: `${{ env.IMAGE_VERSION }}`
-            URI: `ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VARIANT_VERSION }}`
-            URI: `ghcr.io/futursolo/portable-ai/${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}`
+            URI: `ghcr.io/futursolo/pai-apps/${{ github.event.inputs.name }}:${{ env.IMAGE_VARIANT_VERSION }}`
+            URI: `ghcr.io/futursolo/pai-apps/${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}`
