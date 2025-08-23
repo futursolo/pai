@@ -1,4 +1,4 @@
-ARG PYTORCH_BASE_IMAGE=ghcr.io/futursolo/portable-ai/base:pytorch-v2.6.0-rocm-v6.4.2-20250820
+ARG PYTORCH_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:pytorch-rocm
 ARG COMFYUI_VERSION=v0.3.51
 
 FROM bitnami/git:2.51.0 AS build-git
@@ -12,13 +12,11 @@ RUN git clone --depth 1 \
 
 FROM ubuntu:24.04 AS build-comfyui
 
-USER root
-
 COPY --from=build-git --chown=root:root /opt/ComfyUI /opt/comfyui
 
 WORKDIR /opt/comfyui
 
-RUN --mount=type=bind,source=./comfyui/_scripts/,target=/tmp/_build/ \
+RUN --mount=type=bind,source=./apps/comfyui/_scripts/,target=/tmp/_build/ \
     /tmp/_build/create-base-tpl.sh
 
 RUN rm -rf .git
@@ -26,7 +24,7 @@ RUN rm -rf .git
 FROM ${PYTORCH_BASE_IMAGE} AS build-comfyui-env
 
 RUN python3 -m venv /opt/comfyui-env/
-RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+RUN --mount=type=bind,source=./apps/_base/_scripts/,target=/tmp/_build/ \
     env \
     PATH="/opt/comfyui-env/bin:$PATH" \
     /tmp/_build/python3-link-parent-env.sh /opt/pytorch-env
@@ -39,24 +37,24 @@ RUN env \
 
 FROM ${PYTORCH_BASE_IMAGE} AS build-final
 
-COPY --from=build-comfyui --chown=root:root /opt/comfyui /opt/comfyui
-COPY --from=build-comfyui-env --chown=root:root /opt/comfyui-env /opt/comfyui-env
-COPY --from=build-comfyui --chown=docker-user:docker-user /opt/comfyui-base-tpl /home/docker-user/data
+COPY --from=build-comfyui /opt/comfyui /opt/comfyui
+COPY --from=build-comfyui-env /opt/comfyui-env /opt/comfyui-env
+COPY --from=build-comfyui /opt/comfyui-base-tpl /opt/comfyui-tpl-base
 
-COPY ./comfyui/_scripts/entrypoint.sh /
+COPY ./apps/comfyui/_scripts/entrypoint.sh /
 
 ENV PATH=/opt/comfyui-env/bin/:/opt/rocm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-USER docker-user
+USER pai-user
 
 SHELL ["/bin/bash", "-c"]
 
 WORKDIR /opt/comfyui
 
 ENV COMFYUI_LISTEN="0.0.0.0"
-ENV COMFYUI_BASE_DIR="/home/docker-user/data"
+ENV COMFYUI_BASE_DIR="/mnt/data"
 ENV COMFYUI_DB_URL="sqlite:////home/docker-user/data/user/comfyui.db"
 
-VOLUME /home/docker-user/data
+VOLUME /mnt/data
 
 ENTRYPOINT /entrypoint.sh
