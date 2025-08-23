@@ -4,9 +4,9 @@ name: example-base
 services:
   rocm:
     build:
-      dockerfile: ./_base/rocm/Dockerfile
-      context: ../..
-    image: ghcr.io/futursolo/portable-ai/base:rocm
+      dockerfile: ./apps/_base/rocm/Dockerfile
+      context: ../../..
+    image: ghcr.io/futursolo/pai-apps/base:rocm
     devices:
       - /dev/dri:/dev/dri
       - /dev/kfd:/dev/kfd
