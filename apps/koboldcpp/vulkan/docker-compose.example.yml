@@ -6,7 +6,7 @@ services:
     build:
       dockerfile: ./koboldcpp/vulkan/Dockerfile
       context: ../..
-    image: ghcr.io/futursolo/portable-ai/koboldcpp:v1.97.4-vulkan
+    image: ghcr.io/futursolo/pai-apps/koboldcpp:v1.97.4-vulkan
     devices:
       - /dev/dri:/dev/dri
     group_add:
@@ -17,7 +17,7 @@ services:
     restart: unless-stopped
     command: >
       --contextsize 8192
-      --model /home/docker-user/models/Llama-3.3-70B-Instruct-Q4_K_M.gguf
+      --model /mnt/models/Llama-3.3-70B-Instruct-Q4_K_M.gguf
       --usevulkan --port 5001 --quiet
       --password mypassword
     security_opt:
@@ -25,5 +25,5 @@ services:
     volumes:
       - read_only: true
         source: ../../test-models
-        target: /home/docker-user/models
+        target: /mnt/models
         type: bind
