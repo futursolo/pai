@@ -53,8 +53,6 @@ RUN mkdir -p ./app/full \
     && cp build/bin/* ./app/full \
     && cp *.py ./app/full \
     && cp -r gguf-py ./app/full \
-    && cp -r requirements ./app/full \
-    && cp requirements.txt ./app/full \
     && cp .devops/tools.sh ./app/full/tools.sh
 
 FROM ${BLAS_ROCM_BASE_IMAGE} AS build-final
