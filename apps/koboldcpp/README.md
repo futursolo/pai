@@ -5,12 +5,12 @@ Run GGUF models easily with a KoboldAI UI.
 ### Variants
 
 - `rocm`: Supports AMD Radeon Graphics with ROCm Support\
-  URI: `ghcr.io/futursolo/portable-ai/koboldcpp:rocm`
+  URI: `ghcr.io/futursolo/pai-apps/koboldcpp:rocm`
 
   Base Repository: https://github.com/YellowRoseCx/koboldcpp-rocm/
 
 - `vulkan`: Supports any Vulkan-compatible Graphics Card\
-  URI: `ghcr.io/futursolo/portable-ai/koboldcpp:vulkan`
+  URI: `ghcr.io/futursolo/pai-apps/koboldcpp:vulkan`
 
   Base Repository: https://github.com/LostRuins/koboldcpp/
 
