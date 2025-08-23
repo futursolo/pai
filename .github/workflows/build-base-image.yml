@@ -87,7 +87,7 @@ jobs:
       - name: Build and Push base:${{ env.IMAGE_VERSION }}
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: apps/
           file: apps/_base/${{ github.event.inputs.variant }}/Dockerfile
           push: true
           tags: |
