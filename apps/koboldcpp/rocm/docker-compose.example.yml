@@ -4,8 +4,8 @@ name: example-koboldcpp
 services:
   koboldcpp:
     build:
-      dockerfile: ./apps/koboldcpp/rocm/Dockerfile
-      context: ../../..
+      dockerfile: ./koboldcpp/rocm/Dockerfile
+      context: ../..
     image: ghcr.io/futursolo/pai-apps/koboldcpp:rocm
     devices:
       - /dev/dri:/dev/dri

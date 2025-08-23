@@ -4,8 +4,8 @@ name: example-comfyui
 services:
   comfyui:
     build:
-      dockerfile: ./apps/comfyui/rocm/Dockerfile
-      context: ../../..
+      dockerfile: ./comfyui/rocm/Dockerfile
+      context: ../..
     image: ghcr.io/futursolo/pai-apps/comfyui:rocm
     devices:
       - /dev/dri:/dev/dri

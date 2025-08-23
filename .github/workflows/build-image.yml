@@ -99,7 +99,7 @@ jobs:
       - name: Build and Push ${{ github.event.inputs.name }}:${{ env.IMAGE_VERSION }}
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: apps/
           file: apps/${{ github.event.inputs.name }}/${{ github.event.inputs.variant }}/Dockerfile
           push: true
           tags: |

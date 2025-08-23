@@ -13,10 +13,10 @@ RUN git clone --depth 1 \
 
 FROM ${ROCM_DEV_IMAGE} AS build-koboldcpp
 
-RUN --mount=type=bind,source=./apps/_base/_scripts/,target=/tmp/_build/ \
+RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
     /tmp/_build/apt-pre.sh
 
-RUN --mount=type=bind,source=./apps/_base/_scripts/,target=/tmp/_build/ \
+RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
     /tmp/_build/apt-install-python3-dev.sh
 
 COPY --from=build-git --chown=root:root /opt/koboldcpp-rocm /opt/koboldcpp
