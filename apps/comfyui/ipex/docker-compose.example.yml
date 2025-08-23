@@ -6,7 +6,7 @@ services:
     build:
       dockerfile: ./comfyui/ipex/Dockerfile
       context: ../..
-    image: ghcr.io/futursolo/portable-ai/comfyui:ipex
+    image: ghcr.io/futursolo/pai-apps/comfyui:ipex
     devices:
       - /dev/dri
     environment:
@@ -29,5 +29,5 @@ services:
 
       - read_only: false
         source: ../../test-data/comfyui
-        target: /home/docker-user/data
+        target: /mnt/comfyui
         type: bind

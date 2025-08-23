@@ -25,5 +25,5 @@ services:
     volumes:
       - read_only: false
         source: ../../test-data/comfyui
-        target: /mnt/data
+        target: /mnt/comfyui
         type: bind
