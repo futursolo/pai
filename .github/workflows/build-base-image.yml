@@ -11,6 +11,7 @@ on:
           - pytorch-ipex
           - intel
           - vulkan
+          - rocm
 
 name: Build Base Container
 
@@ -86,7 +87,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: _base/${{ github.event.inputs.variant }}/Dockerfile
+          file: apps/_base/${{ github.event.inputs.variant }}/Dockerfile
           push: true
           tags: |
-            ghcr.io/futursolo/portable-ai/base:${{ env.IMAGE_VERSION }}
+            ghcr.io/futursolo/pai-apps/base:${{ env.IMAGE_VERSION }}
