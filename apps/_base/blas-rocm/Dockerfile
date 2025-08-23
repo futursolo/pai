@@ -1,5 +1,5 @@
 ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-24.04:6.4.3-complete
-ARG ROCM_BASE_IMAGE=ghcr.io/futursolo/portable-ai/base:rocm-v6.4.3-does-not-exist
+ARG ROCM_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:rocm-v6.4.3-20250823
 
 FROM ${ROCM_DEV_IMAGE} AS build-rocm-blas
 
