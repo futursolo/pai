@@ -32,6 +32,6 @@ services:
       - /usr/lib/wsl:/usr/lib/wsl
 
       - read_only: false
-        source: ../../test-data/ollama
+        source: ../../../test-data/ollama
         target: /mnt/ollama
         type: bind

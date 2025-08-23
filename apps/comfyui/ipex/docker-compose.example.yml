@@ -28,6 +28,6 @@ services:
       - /usr/lib/wsl:/usr/lib/wsl
 
       - read_only: false
-        source: ../../test-data/comfyui
+        source: ../../../test-data/comfyui
         target: /mnt/comfyui
         type: bind
