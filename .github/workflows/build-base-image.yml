@@ -69,7 +69,7 @@ jobs:
         working-directory: "apps/_base/${{ github.event.inputs.variant }}"
 
       - name: Define Versions (Release)
-        if: ${{ github.ref == 'refs/heads/master' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           _DATE_VER=$(date +'%Y%m%d')
           IMAGE_VERSION=${BASE_IMAGE_VERSION}-${_DATE_VER}
@@ -77,7 +77,7 @@ jobs:
           echo "IMAGE_VERSION=${IMAGE_VERSION}" >> $GITHUB_ENV
 
       - name: Define Versions (Preview)
-        if: ${{ github.ref != 'refs/heads/master' }}
+        if: ${{ github.ref != 'refs/heads/main' }}
         run: |
           _DATE_VER=$(date +'%Y%m%d')
           IMAGE_VERSION=${BASE_IMAGE_VERSION}-preview
