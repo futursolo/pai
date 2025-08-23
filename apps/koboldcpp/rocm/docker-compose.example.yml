@@ -21,7 +21,7 @@ services:
     restart: unless-stopped
     command: >
       --contextsize 8192
-      --model /home/docker-user/models/Llama-3.3-70B-Instruct-Q4_K_M.gguf
+      --model /mnt/models/Llama-3.3-70B-Instruct-Q4_K_M.gguf
       --usecublas --port 5001 --quiet
       --password mypassword
     security_opt:
@@ -29,5 +29,5 @@ services:
     volumes:
       - read_only: true
         source: ../../test-models
-        target: /home/docker-user/models
+        target: /mnt/models
         type: bind
