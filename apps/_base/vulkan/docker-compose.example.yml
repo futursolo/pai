@@ -8,7 +8,7 @@ services:
       context: ../..
     image: ghcr.io/futursolo/pai-apps/base:vulkan
     devices:
-      - /dev/dri:/dev/dri
+      - /dev/dri
     group_add:
       - video
     restart: unless-stopped
