@@ -75,7 +75,7 @@ jobs:
         working-directory: "apps/${{ github.event.inputs.name }}/${{ github.event.inputs.variant }}"
 
       - name: Define Versions (Release)
-        if: ${{ github.ref == 'refs/heads/master' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           _DATE_VER=$(date +'%Y%m%d')
           IMAGE_VERSION=${BASE_IMAGE_VERSION}-${_DATE_VER}
@@ -87,7 +87,7 @@ jobs:
           echo "RELEASE_TAG=${RELEASE_TAG}" >> $GITHUB_ENV
 
       - name: Define Versions (Preview)
-        if: ${{ github.ref != 'refs/heads/master' }}
+        if: ${{ github.ref != 'refs/heads/main' }}
         run: |
           _DATE_VER=$(date +'%Y%m%d')
           IMAGE_VERSION=${BASE_IMAGE_VERSION}-preview
@@ -108,7 +108,7 @@ jobs:
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
-        if: ${{ github.ref == 'refs/heads/master' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           generate_release_notes: true
