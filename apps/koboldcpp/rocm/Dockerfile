@@ -45,7 +45,7 @@ FROM ${BLAS_ROCM_BASE_IMAGE} AS build-final
 
 COPY --from=build-koboldcpp /opt/koboldcpp/dist /opt/koboldcpp
 
-USER docker-user
+USER pai-user
 
 WORKDIR /opt/koboldcpp
 
