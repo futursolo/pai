@@ -45,6 +45,9 @@ COPY ./apps/comfyui/_scripts/entrypoint.sh /
 
 ENV PATH=/opt/comfyui-env/bin/:/opt/rocm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
+RUN mkdir -p /mnt/data/
+RUN chown pai-user:pai-user /mnt/data/
+
 USER pai-user
 
 SHELL ["/bin/bash", "-c"]
@@ -53,8 +56,8 @@ WORKDIR /opt/comfyui
 
 ENV COMFYUI_LISTEN="0.0.0.0"
 ENV COMFYUI_BASE_DIR="/mnt/data"
-ENV COMFYUI_DB_URL="sqlite:////home/docker-user/data/user/comfyui.db"
+ENV COMFYUI_DB_URL="sqlite:////mnt/data/user/comfyui.db"
 
 VOLUME /mnt/data
 
-ENTRYPOINT /entrypoint.sh
+ENTRYPOINT [ "/entrypoint.sh" ]
