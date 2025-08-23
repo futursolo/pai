@@ -1,5 +1,5 @@
 ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-24.04:6.4.3-complete
-ARG BLAS_ROCM_BASE_IMAGE=ghcr.io/futursolo/portable-ai/base:blas-rocm-v6.4.3-does-not-exist
+ARG BLAS_ROCM_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:blas-rocm-v6.4.3-20250823
 ARG KOBOLDCPP_ROCM_VERSION=v1.97.4.yr0-ROCm
 
 FROM bitnami/git:2.51.0 AS build-git
@@ -13,10 +13,10 @@ RUN git clone --depth 1 \
 
 FROM ${ROCM_DEV_IMAGE} AS build-koboldcpp
 
-RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+RUN --mount=type=bind,source=./apps/_base/_scripts/,target=/tmp/_build/ \
     /tmp/_build/apt-pre.sh
 
-RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+RUN --mount=type=bind,source=./apps/_base/_scripts/,target=/tmp/_build/ \
     /tmp/_build/apt-install-python3-dev.sh
 
 COPY --from=build-git --chown=root:root /opt/koboldcpp-rocm /opt/koboldcpp
@@ -45,7 +45,7 @@ FROM ${BLAS_ROCM_BASE_IMAGE} AS build-final
 
 COPY --from=build-koboldcpp /opt/koboldcpp/dist /opt/koboldcpp
 
-USER docker-user
+USER pai-user
 
 WORKDIR /opt/koboldcpp
 

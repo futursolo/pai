@@ -4,16 +4,15 @@ name: example-koboldcpp
 services:
   koboldcpp:
     build:
-      dockerfile: ./koboldcpp/rocm/Dockerfile
-      context: ../..
-    image: ghcr.io/futursolo/portable-ai/koboldcpp:rocm
+      dockerfile: ./apps/koboldcpp/rocm/Dockerfile
+      context: ../../..
+    image: ghcr.io/futursolo/pai-apps/koboldcpp:rocm
     devices:
       - /dev/dri:/dev/dri
       - /dev/kfd:/dev/kfd
     environment:
       HSA_OVERRIDE_GFX_VERSION: 11.0.0
       PYTORCH_ROCM_ARCH: gfx1100
-      TZ: Etc/UTC
     group_add:
       - video
       - render
@@ -22,7 +21,7 @@ services:
     restart: unless-stopped
     command: >
       --contextsize 8192
-      --model /home/docker-user/models/Llama-3.3-70B-Instruct-Q4_K_M.gguf
+      --model /mnt/models/Llama-3.3-70B-Instruct-Q4_K_M.gguf
       --usecublas --port 5001 --quiet
       --password mypassword
     security_opt:
@@ -30,5 +29,5 @@ services:
     volumes:
       - read_only: true
         source: ../../test-models
-        target: /home/docker-user/models
+        target: /mnt/models
         type: bind
