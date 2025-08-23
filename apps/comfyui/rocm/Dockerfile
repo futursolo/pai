@@ -38,8 +38,8 @@ RUN env \
 FROM ${PYTORCH_BASE_IMAGE} AS build-final
 
 COPY --from=build-comfyui /opt/comfyui /opt/comfyui
+COPY --from=build-comfyui /opt/comfyui-base-tpl /opt/comfyui-base-tpl
 COPY --from=build-comfyui-env /opt/comfyui-env /opt/comfyui-env
-COPY --from=build-comfyui /opt/comfyui-base-tpl /opt/comfyui-tpl-base
 
 COPY ./apps/comfyui/_scripts/entrypoint.sh /
 
