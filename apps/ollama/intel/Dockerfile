@@ -1,4 +1,4 @@
-ARG INTEL_BASE_IMAGE=ghcr.io/futursolo/portable-ai/base:intel-20250822
+ARG INTEL_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:intel-20250823
 ARG IPEX_LLM_VERSION=v2.3.0-nightly
 ARG OLLAMA_IPEX_LLM_VERSION=2.3.0b20250725
 
@@ -28,9 +28,12 @@ COPY --from=build-ollama /tmp/ollama/ollama /opt/ollama/
 
 COPY ./ollama/intel/_scripts/ollama-shim /bin/ollama
 
-USER docker-user
+RUN mkdir -p /mnt/data
+RUN chown pai-user:pai-user /mnt/data
 
-RUN mkdir -p /home/docker-user/.ollama
+USER pai-user
+
+ENV OLLAMA_MODELS=/mnt/data
 
 VOLUME [ "/home/docker-user/.ollama" ]
 
