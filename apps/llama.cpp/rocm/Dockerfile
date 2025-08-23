@@ -25,6 +25,16 @@ RUN env \
 
 FROM ${ROCM_DEV_IMAGE} AS build-llama-cpp
 
+RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    /tmp/_build/apt-pre.sh
+
+RUN  --mount=type=bind,source=./llama.cpp/rocm/_scripts/,target=/tmp/_build/ \
+    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    /tmp/_build/apt-install-build-deps.sh
+
 COPY --from=build-git --chown=root:root /opt/llama.cpp /opt/llama.cpp
 
 WORKDIR /opt/llama.cpp
