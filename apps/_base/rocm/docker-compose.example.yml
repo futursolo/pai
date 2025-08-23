@@ -13,7 +13,6 @@ services:
     environment:
       HSA_OVERRIDE_GFX_VERSION: 11.0.0
       PYTORCH_ROCM_ARCH: gfx1100
-      TZ: Etc/UTC
     group_add:
       - video
       - render

@@ -5,7 +5,7 @@ services:
   blas-rocm:
     build:
       dockerfile: ./apps/_base/blas-rocm/Dockerfile
-      context: ../..
+      context: ../../..
     image: ghcr.io/futursolo/pai-apps/base:blas-rocm
     devices:
       - /dev/dri:/dev/dri
@@ -13,7 +13,6 @@ services:
     environment:
       HSA_OVERRIDE_GFX_VERSION: 11.0.0
       PYTORCH_ROCM_ARCH: gfx1100
-      TZ: Etc/UTC
     group_add:
       - video
       - render
