@@ -40,7 +40,7 @@ COPY --from=build-git --chown=root:root /opt/llama.cpp /opt/llama.cpp
 WORKDIR /opt/llama.cpp
 
 ARG ROCM_PATH=/opt/rocm
-ARG ROCM_GPU_TARGETS="gfx803 gfx900 gfx906 gfx908 gfx90a gfx1010 gfx1030 gfx1031 gfx1032 gfx1100 gfx1101 gfx1102 gfx1200 gfx1201"
+ARG ROCM_GPU_TARGETS="gfx803,gfx900,gfx906,gfx908,gfx90a,gfx1010,gfx1030,gfx1031,gfx1032,gfx1100,gfx1101,gfx1102,gfx1200,gfx1201"
 
 RUN HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \
     cmake -S . -B build -DGGML_HIP=ON -DAMDGPU_TARGETS=$ROCM_GPU_TARGETS -DGGML_BACKEND_DL=ON -DGGML_CPU_ALL_VARIANTS=ON -DCMAKE_BUILD_TYPE=Release -DLLAMA_BUILD_TESTS=OFF \
@@ -77,6 +77,7 @@ WORKDIR /opt/llama.cpp
 
 SHELL [ "/bin/bash", "-c" ]
 
+ENV ROCM_PATH=/opt/rocm
 ENV PATH=/opt/llama.cpp-env/bin:/opt/llama.cpp/:/opt/rocm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ENV LD_LIBRARY_PATH=/opt/rocm/lib
 
