@@ -35,6 +35,8 @@ and CUDA-based images are usually already available from other sources.
   - `ipex`: `ghcr.io/futursolo/pai-apps/comfyui:ipex`
 - [Ollama](./apps/ollama/README.md)
   - `intel`: `ghcr.io/futursolo/pai-apps/ollama:intel`
+- [llama.cpp](./apps/llama.cpp/README.md)
+  - `rocm`: `ghcr.io/futursolo/pai-apps/llama.cpp:rocm`
 
 ### Rootless Containers
 
