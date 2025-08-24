@@ -2,6 +2,4 @@
 
 set -ex
 
-if [ ! $(getent group render) ]; then
-    groupadd -g 993 render
-fi
+getent group render || groupadd -g 993 render
