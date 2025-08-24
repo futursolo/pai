@@ -12,7 +12,6 @@ services:
       - /dev/kfd
     environment:
       HSA_OVERRIDE_GFX_VERSION: 11.0.0
-      PYTORCH_ROCM_ARCH: gfx1100
     command: >
       --server
       -m /mnt/models/Llama-3.3-70B-Instruct-Q4_K_M.gguf
