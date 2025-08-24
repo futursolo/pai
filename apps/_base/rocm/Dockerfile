@@ -10,6 +10,9 @@ RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
     /tmp/_build/create-pai-user.sh
 
 RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+    /tmp/_build/create-render-group.sh
+
+RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     /tmp/_build/apt-pre.sh

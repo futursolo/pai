@@ -45,6 +45,10 @@ FROM ${BLAS_ROCM_BASE_IMAGE} AS build-final
 
 COPY --from=build-koboldcpp /opt/koboldcpp/dist /opt/koboldcpp
 
+# TODO: Remove once base image has render group
+RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+    /tmp/_build/create-render-group.sh
+
 USER pai-user
 
 WORKDIR /opt/koboldcpp
