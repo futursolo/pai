@@ -1,28 +1,29 @@
 ---
-name: example-koboldcpp
+name: example-llama-cpp
 
 services:
-  koboldcpp:
+  llama-cpp:
     build:
-      dockerfile: ./koboldcpp/rocm/Dockerfile
+      dockerfile: ./llama.cpp/rocm/Dockerfile
       context: ../..
-    image: ghcr.io/futursolo/pai-apps/koboldcpp:rocm
+    image: ghcr.io/futursolo/pai-apps/llama.cpp:rocm
     devices:
       - /dev/dri
       - /dev/kfd
     environment:
       HSA_OVERRIDE_GFX_VERSION: 11.0.0
+    command: >
+      --server
+      -m /mnt/models/Llama-3.3-70B-Instruct-Q4_K_M.gguf
+      -c 2048 -ngl 999 -mg 0
+      --port 8080
+      --host 0.0.0.0
     group_add:
       - video
       - render
     ports:
-      - 5001:5001
+      - 8080:8080
     restart: unless-stopped
-    command: >
-      --contextsize 8192
-      --model /mnt/models/Llama-3.3-70B-Instruct-Q4_K_M.gguf
-      --usecublas --port 5001 --quiet
-      --password mypassword
     security_opt:
       - seccomp:unconfined
     volumes:

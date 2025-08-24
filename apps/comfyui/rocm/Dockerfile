@@ -43,6 +43,10 @@ COPY --from=build-comfyui-env /opt/comfyui-env /opt/comfyui-env
 
 COPY ./comfyui/_scripts/entrypoint.sh /
 
+# TODO: Remove once base image has render group
+RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+    /tmp/_build/create-render-group.sh
+
 ENV PATH=/opt/comfyui-env/bin/:/opt/rocm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 RUN mkdir -p /mnt/comfyui/
