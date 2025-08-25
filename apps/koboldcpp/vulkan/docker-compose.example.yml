@@ -12,8 +12,10 @@ services:
     group_add:
       - video
       - render
-    ports:
-      - 5001:5001
+    networks:
+      # app_tier has no Internet access.
+      # Ingress traffic is forwarded via the ingress container.
+      - app_tier
     restart: unless-stopped
     command: >
       --contextsize 8192
@@ -27,3 +29,21 @@ services:
         source: ../../../test-models
         target: /mnt/models
         type: bind
+
+  # We accept traffic with the ingress container and forward it to the app.
+  ingress:
+    image: alpine/socat:latest
+    depends_on:
+      koboldcpp:
+        condition: service_started
+    ports:
+      - 5001:5001
+    networks:
+      - app_tier
+      - ingress_tier
+    command: "TCP-LISTEN:5001,fork,reuseaddr TCP4:koboldcpp:5001"
+
+networks:
+  app_tier:
+    internal: true
+  ingress_tier:

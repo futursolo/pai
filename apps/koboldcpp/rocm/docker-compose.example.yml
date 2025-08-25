@@ -33,6 +33,7 @@ services:
         target: /mnt/models
         type: bind
 
+  # We accept traffic with the ingress container and forward it to the app.
   ingress:
     image: alpine/socat:latest
     depends_on:
