@@ -8,7 +8,7 @@ _OLLAMA_PID=$!
 
 while true
 do
-    /bin/ollama list  > /dev/null 2> /dev/null && break || echo "Waiting Temporary Ollama Server..."
+    /bin/ollama list > /dev/null 2> /dev/null && break || echo "Waiting Temporary Ollama Server..."
 	sleep 1
 done
 
