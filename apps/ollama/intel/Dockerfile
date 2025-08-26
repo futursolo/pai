@@ -27,6 +27,7 @@ USER root
 COPY --from=build-ollama /tmp/ollama/ollama /opt/ollama/
 
 COPY ./ollama/intel/_scripts/ollama-shim /bin/ollama
+COPY ./ollama/intel/_scripts/ollama-safe-pull.sh /opt/ollama-extras/ollama-safe-pull.sh
 
 RUN mkdir -p /mnt/ollama
 RUN chown pai-user:pai-user /mnt/ollama

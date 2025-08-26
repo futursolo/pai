@@ -21,8 +21,9 @@ services:
       # - ONEAPI_DEVICE_SELECTOR="level_zero:0;level_zero:1"
     group_add:
       - video
-    ports:
-      - 11434:11434
+      - render
+    networks:
+      - app_tier
     restart: unless-stopped
 
     # WSL Only
@@ -36,3 +37,40 @@ services:
         source: ../../../test-data/ollama
         target: /mnt/ollama
         type: bind
+
+  # Pull models with the following command:
+  # docker compose -f docker-compose.example.yml run -it --rm ollama-pull tinyllama
+  # If you have a default docker-compose.yml file, you can pull models with:
+  # docker compose run --rm -it ollama-pull tinyllama
+  ollama-pull:
+    profiles:
+      - extras
+    build:
+      dockerfile: ./ollama/intel/Dockerfile
+      context: ../..
+    image: ghcr.io/futursolo/pai-apps/ollama:intel
+    entrypoint: ["/opt/ollama-extras/ollama-safe-pull.sh"]
+
+    volumes:
+      - read_only: false
+        source: ../../../test-data/ollama
+        target: /mnt/ollama
+        type: bind
+
+  # We accept traffic with the ingress container and forward it to the app.
+  ingress:
+    image: alpine/socat:latest
+    depends_on:
+      ollama:
+        condition: service_started
+    ports:
+      - 11434:11434
+    networks:
+      - app_tier
+      - ingress_tier
+    command: "TCP-LISTEN:11434,fork,reuseaddr TCP4:ollama:11434"
+
+networks:
+  app_tier:
+    internal: true
+  ingress_tier:
