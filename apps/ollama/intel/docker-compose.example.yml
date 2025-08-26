@@ -40,6 +40,8 @@ services:
 
   # Pull models with the following command:
   # docker compose -f docker-compose.example.yml run -it --rm ollama-pull tinyllama
+  # If you have a default docker-compose.yml file, you can pull models with:
+  # docker compose run --rm -it ollama-pull tinyllama
   ollama-pull:
     profiles:
       - extras
