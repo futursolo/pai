@@ -70,10 +70,6 @@ COPY --from=build-llama-cpp-env /opt/llama.cpp-env /opt/llama.cpp-env
 COPY --from=build-llama-cpp /opt/llama.cpp/app/lib /opt/llama.cpp
 COPY --from=build-llama-cpp /opt/llama.cpp/app/full /opt/llama.cpp
 
-# TODO: Remove once base image has render group
-RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
-    /tmp/_build/create-render-group.sh
-
 USER pai-user
 
 WORKDIR /opt/llama.cpp
