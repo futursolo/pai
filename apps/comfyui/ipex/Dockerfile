@@ -1,5 +1,5 @@
 ARG PYTORCH_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:pytorch-v2.8.0-ipex-v2.8.10-20250823
-ARG COMFYUI_VERSION=v0.3.52
+ARG COMFYUI_VERSION=v0.3.53
 
 FROM bitnami/git:2.51.0 AS build-git
 
