@@ -1,5 +1,5 @@
 ARG PYTORCH_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:pytorch-v2.8.0-rocm-v6.4.3-20250823
-ARG COMFYUI_VERSION=v0.3.52
+ARG COMFYUI_VERSION=v0.3.53
 
 FROM bitnami/git:2.51.0 AS build-git
 
@@ -42,10 +42,6 @@ COPY --from=build-comfyui /opt/comfyui-base-tpl /opt/comfyui-base-tpl
 COPY --from=build-comfyui-env /opt/comfyui-env /opt/comfyui-env
 
 COPY ./comfyui/_scripts/entrypoint.sh /
-
-# TODO: Remove once base image has render group
-RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
-    /tmp/_build/create-render-group.sh
 
 ENV PATH=/opt/comfyui-env/bin/:/opt/rocm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
