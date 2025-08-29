@@ -11,7 +11,7 @@ WORKDIR /tmp
 ADD https://github.com/LostRuins/koboldcpp/releases/download/${KOBOLDCPP_VERSION}/koboldcpp-linux-x64-nocuda \
     /tmp/
 
-RUN chmod +x /tmp/koboldcpp-linux-x64-nocuda
+RUN chmod 755 /tmp/koboldcpp-linux-x64-nocuda
 
 FROM ${VULKAN_BASE_IMAGE} AS build-final
 
