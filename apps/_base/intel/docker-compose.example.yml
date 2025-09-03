@@ -11,6 +11,7 @@ services:
       - /dev/dri
     group_add:
       - video
+      - $GROUP_ID_RENDER  # See README.md about how to obtain this ID.
     restart: unless-stopped
 
     # WSL Only

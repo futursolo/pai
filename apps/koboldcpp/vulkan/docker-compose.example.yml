@@ -11,7 +11,7 @@ services:
       - /dev/dri
     group_add:
       - video
-      - render
+      - $GROUP_ID_RENDER  # See README.md about how to obtain this ID.
     networks:
       # app_tier has no Internet access.
       # Ingress traffic is forwarded via the ingress container.

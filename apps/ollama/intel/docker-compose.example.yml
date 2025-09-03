@@ -21,7 +21,7 @@ services:
       # - ONEAPI_DEVICE_SELECTOR="level_zero:0;level_zero:1"
     group_add:
       - video
-      - render
+      - $GROUP_ID_RENDER  # See README.md about how to obtain this ID.
     networks:
       - app_tier
     restart: unless-stopped
