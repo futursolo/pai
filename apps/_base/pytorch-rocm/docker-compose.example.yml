@@ -15,7 +15,7 @@ services:
       PYTORCH_ROCM_ARCH: gfx1100
     group_add:
       - video
-      - render
+      - $GROUP_ID_RENDER  # See README.md about how to obtain this ID.
     restart: unless-stopped
     security_opt:
       - seccomp:unconfined

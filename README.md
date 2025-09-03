@@ -38,6 +38,140 @@ and CUDA-based images are usually already available from other sources.
 - [llama.cpp](./apps/llama.cpp/README.md)
   - `rocm`: `ghcr.io/futursolo/pai-apps/llama.cpp:rocm`
 
+### Permissions and Capabilities
+
+In order for containers to access necessary accelerators, the following configuration is required:
+
+#### ROCm
+
+The container must have access to the following devices:
+
+- `/dev/dri` (Direct Rendering Infrastructure)
+- `/dev/kfd` (AMD Kernel Fusion Driver)
+
+They can be mapped like the following in the `docker-compose.yml`:
+
+```yaml
+services:
+  app:
+    # ...
+    devices:
+      - /dev/dri
+      - /dev/kfd
+```
+
+The user inside container must have access to the following groups:
+
+- `video`
+  - This group usually has a fixed Group ID (44) and is embedded in the container, it can be referenced as name of the container.
+- `render`
+  - This group has a dynamic Group ID and it must match the host environment.
+  - You can figure this out with: `getent group render | awk '{split($0,a,":"); print a[3]}'`
+
+They can be added like the following in the `docker-compose.yml`:
+
+```yaml
+services:
+  app:
+    # ...
+    group_add:
+      - video
+      - $GROUP_ID_RENDER # This much match the group id of machine that runs the container, see above.
+```
+
+Optionally, the container can enable CPU / GPU memory mapping to improve performance.
+
+It can be configured like the following in the `docker-compose.yml`:
+
+```yaml
+services:
+  app:
+    # ...
+    security_opt:
+      - seccomp:unconfined
+```
+
+Optionally, the container can increase the shared memory size to improve performance.
+
+It can be configured like the following in the `docker-compose.yml`:
+
+```yaml
+services:
+  app:
+    # ...
+    shm_size: 16G
+```
+
+#### Intel / IPEX
+
+The container must have access to the following devices:
+
+- `/dev/dri` (Direct Rendering Infrastructure)
+
+They can be mapped like the following in the `docker-compose.yml`:
+
+```yaml
+services:
+  app:
+    # ...
+    devices:
+      - /dev/dri
+      - /dev/kfd
+```
+
+The user inside container must have access to the following groups:
+
+- `video`
+  - This group usually has a fixed Group ID (44) and is embedded in the container, it can be referenced as name of the container.
+- `render`
+  - This group has a dynamic Group ID and it must match the host environment.
+  - You can figure this out with: `getent group render | awk '{split($0,a,":"); print a[3]}'`
+
+They can be added like the following in the `docker-compose.yml`:
+
+```yaml
+services:
+  app:
+    # ...
+    group_add:
+      - video
+      - $GROUP_ID_RENDER # This much match the group id of machine that runs the container, see above.
+```
+
+Optionally, the container can enable CPU / GPU memory mapping to improve performance.
+
+It can be configured like the following in the `docker-compose.yml`:
+
+```yaml
+services:
+  app:
+    # ...
+    security_opt:
+      - seccomp:unconfined
+```
+
+Optionally, the container can increase the shared memory size to improve performance.
+
+It can be configured like the following in the `docker-compose.yml`:
+
+```yaml
+services:
+  app:
+    # ...
+    shm_size: 16G
+```
+
+For containers running under WSL2 (Windows Subsystem for Linux), you need the following configuration:
+
+```yaml
+services:
+  app:
+    # ...
+    privileged: true
+    volumes:
+      - /usr/lib/wsl:/usr/lib/wsl
+```
+
 ### Rootless Containers
 
 All images are by default run with `pai-user:pai-user`(1999:1999) instead of root.
