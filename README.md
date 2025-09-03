@@ -166,6 +166,7 @@ For containers running under WSL2 (Windows Subsystem for Linux), you need the fo
 ```yaml
 services:
   app:
+    # ...
     privileged: true
     volumes:
       - /usr/lib/wsl:/usr/lib/wsl
