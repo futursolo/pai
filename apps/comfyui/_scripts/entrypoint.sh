@@ -4,7 +4,7 @@ set -e
 
 if [ -z "$(ls -A $COMFYUI_BASE_DIR)" ]; then
     echo "Initialising Data Directory..."
-    cp -ar /opt/comfyui-base-tpl/ $COMFYUI_BASE_DIR/
+    cp -ar /opt/comfyui-base-tpl/* $COMFYUI_BASE_DIR/
 fi
 
 mkdir -p $COMFYUI_BASE_DIR/input
