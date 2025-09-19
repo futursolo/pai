@@ -13,6 +13,16 @@ RUN git clone --depth 1 \
 
 FROM ${BLAS_ROCM_BASE_IMAGE} AS build-llama-cpp-env
 
+RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    /tmp/_build/apt-pre.sh
+
+RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    /tmp/_build/apt-install-git.sh
+
 RUN python3 -m venv /opt/llama.cpp-env/
 
 COPY --from=build-git --chown=root:root /opt/llama.cpp/requirements.txt /tmp/requirements.txt
@@ -75,8 +85,7 @@ WORKDIR /opt/llama.cpp
 
 SHELL [ "/bin/bash", "-c" ]
 
-ENV ROCM_PATH=/opt/rocm
-ENV PATH=/opt/llama.cpp-env/bin:/opt/llama.cpp/:/opt/rocm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV PATH=/opt/llama.cpp-env/bin:/opt/llama.cpp/:$PATH
 ENV LD_LIBRARY_PATH=/opt/rocm/lib
 
 ENTRYPOINT [ "/opt/llama.cpp/tools.sh" ]
