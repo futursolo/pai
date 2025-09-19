@@ -27,5 +27,5 @@ RUN  --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/ \
 #COPY --from=build-rocm /opt/amdgpu/ /opt/amdgpu/
 COPY --from=build-rocm /opt/rocm/ /opt/rocm/
 
-ENV ROCM_PATH=/etc/rocm
-ENV PATH=/etc/rocm/bin:$PATH
+ENV ROCM_PATH=/opt/rocm
+ENV PATH=/opt/rocm/bin:$PATH

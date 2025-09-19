@@ -60,7 +60,6 @@ RUN HIPCXX="$(hipconfig -l)/clang" \
     -DCMAKE_BUILD_TYPE=Release \
     -DLLAMA_BUILD_TESTS=OFF \
     -DGGML_HIP_ROCWMMA_FATTN=ON \
-    -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
     && cmake --build build --config Release -j$(nproc)
 
 RUN mkdir -p ./app/lib \
