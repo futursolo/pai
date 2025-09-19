@@ -1,6 +1,6 @@
-ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-24.04:6.4.3-complete
-ARG BLAS_ROCM_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:blas-rocm-v6.4.3-20250823
-ARG LLAMA_CPP_VERSION=b6258
+ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-24.04:7.0-complete
+ARG BLAS_ROCM_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:blas-rocm-v7.0.0-preview
+ARG LLAMA_CPP_VERSION=b6519
 
 FROM alpine/git:2.49.1 AS build-git
 
@@ -39,8 +39,7 @@ COPY --from=build-git --chown=root:root /opt/llama.cpp /opt/llama.cpp
 WORKDIR /opt/llama.cpp
 
 ARG ROCM_PATH=/opt/rocm
-ARG ROCM_GPU_TARGETS="gfx803,gfx900,gfx906,gfx908,gfx90a,gfx1010,gfx1030,gfx1031,gfx1032,gfx1100,gfx1101,gfx1102,gfx1200,gfx1201"
-
+ARG ROCM_GPU_TARGETS="gfx908,gfx90a,gfx942,gfx950,gfx1030,gfx1100,gfx1101,gfx1151,gfx1200,gfx1201"
 RUN HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \
     cmake -S . -B build -DGGML_HIP=ON -DAMDGPU_TARGETS=$ROCM_GPU_TARGETS -DGGML_BACKEND_DL=ON -DGGML_CPU_ALL_VARIANTS=ON -DCMAKE_BUILD_TYPE=Release -DLLAMA_BUILD_TESTS=OFF \
     && cmake --build build --config Release -j$(nproc)
