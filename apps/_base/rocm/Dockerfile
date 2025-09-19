@@ -24,7 +24,7 @@ RUN  --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/ \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     /tmp/_build/apt-install-rocminfo-deps.sh
 
-COPY --from=build-rocm /opt/amdgpu/ /opt/amdgpu/
+#COPY --from=build-rocm /opt/amdgpu/ /opt/amdgpu/
 COPY --from=build-rocm /opt/rocm/ /opt/rocm/
 
 ENV ROCM_PATH=/etc/rocm
