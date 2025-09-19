@@ -28,4 +28,5 @@ RUN  --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/ \
 COPY --from=build-rocm /opt/rocm/ /opt/rocm/
 
 ENV ROCM_PATH=/opt/rocm
+ENV LD_LIBRARY_PATH=/opt/rocm/lib
 ENV PATH=/opt/rocm/bin:$PATH

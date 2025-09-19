@@ -8,6 +8,7 @@ RUN cp -av /opt/rocm/lib/libhipblas.so* /opt/rocm-blas-extras/lib/
 RUN cp -av /opt/rocm/lib/librocblas.so* /opt/rocm-blas-extras/lib/
 RUN cp -av /opt/rocm/lib/librocsolver.so* /opt/rocm-blas-extras/lib/
 RUN cp -av /opt/rocm/lib/libhipblaslt.so* /opt/rocm-blas-extras/lib/
+RUN cp -av /opt/rocm/lib/librocroller.so* /opt/rocm-blas-extras/lib/
 
 FROM ${ROCM_BASE_IMAGE} AS build-final
 

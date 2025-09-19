@@ -94,6 +94,5 @@ WORKDIR /opt/llama.cpp
 SHELL [ "/bin/bash", "-c" ]
 
 ENV PATH=/opt/llama.cpp-env/bin:/opt/llama.cpp/:$PATH
-ENV LD_LIBRARY_PATH=/opt/rocm/lib
 
 ENTRYPOINT [ "/opt/llama.cpp/tools.sh" ]
