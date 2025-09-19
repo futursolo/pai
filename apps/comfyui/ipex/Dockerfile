@@ -43,10 +43,10 @@ COPY --from=build-comfyui-env /opt/comfyui-env /opt/comfyui-env
 
 COPY ./comfyui/_scripts/entrypoint.sh /
 
-ENV PATH=/opt/comfyui-env/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV PATH=/opt/comfyui-env/bin/:$PATH
 
-RUN mkdir -p /mnt/data/
-RUN chown pai-user:pai-user /mnt/data/
+RUN mkdir -p /mnt/comfyui/
+RUN chown pai-user:pai-user /mnt/comfyui/
 
 USER pai-user
 
