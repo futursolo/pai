@@ -50,8 +50,17 @@ WORKDIR /opt/llama.cpp
 
 ARG ROCM_PATH=/opt/rocm
 ARG ROCM_GPU_TARGETS="gfx908,gfx90a,gfx942,gfx950,gfx1030,gfx1100,gfx1101,gfx1151,gfx1200,gfx1201"
-RUN HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \
-    cmake -S . -B build -DGGML_HIP=ON -DAMDGPU_TARGETS=$ROCM_GPU_TARGETS -DGGML_BACKEND_DL=ON -DGGML_CPU_ALL_VARIANTS=ON -DCMAKE_BUILD_TYPE=Release -DLLAMA_BUILD_TESTS=OFF \
+RUN HIPCXX="$(hipconfig -l)/clang" \
+    HIP_PATH="$(hipconfig -R)" \
+    cmake -S . -B build \
+    -DGGML_HIP=ON \
+    -DAMDGPU_TARGETS=$ROCM_GPU_TARGETS \
+    -DGGML_BACKEND_DL=ON \
+    -DGGML_CPU_ALL_VARIANTS=ON \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DLLAMA_BUILD_TESTS=OFF \
+    -DGGML_HIP_ROCWMMA_FATTN=ON \
+    -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
     && cmake --build build --config Release -j$(nproc)
 
 RUN mkdir -p ./app/lib \
