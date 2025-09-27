@@ -40,3 +40,5 @@ RUN --mount=type=bind,source=./_base/pytorch-ipex/_scripts/,target=/tmp/_build/ 
 FROM build-ipex-base AS build-final
 
 COPY --from=build-pytorch --chown=root:root /opt/pytorch-env /opt/pytorch-env
+
+ENV PATH=/opt/pytorch-env/bin/:$PATH
