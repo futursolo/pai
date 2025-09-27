@@ -49,7 +49,7 @@ COPY --from=build-git --chown=root:root /opt/llama.cpp /opt/llama.cpp
 WORKDIR /opt/llama.cpp
 
 ARG ROCM_PATH=/opt/rocm
-ARG ROCM_GPU_TARGETS="gfx908,gfx90a,gfx942,gfx950,gfx1030,gfx1100,gfx1101,gfx1151,gfx1200,gfx1201"
+ARG ROCM_GPU_TARGETS="gfx1030,gfx1100,gfx1101,gfx1151,gfx1200,gfx1201"
 RUN HIPCXX="$(hipconfig -l)/clang" \
     HIP_PATH="$(hipconfig -R)" \
     cmake -S . -B build \
