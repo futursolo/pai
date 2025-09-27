@@ -1,5 +1,5 @@
 ARG PYTORCH_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:pytorch-v2.8.0-ipex-v2.8.10-20250823
-ARG COMFYUI_VERSION=v0.3.59
+ARG COMFYUI_VERSION=v0.3.60
 
 FROM alpine/git:2.49.1 AS build-git
 
@@ -43,10 +43,10 @@ COPY --from=build-comfyui-env /opt/comfyui-env /opt/comfyui-env
 
 COPY ./comfyui/_scripts/entrypoint.sh /
 
-ENV PATH=/opt/comfyui-env/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV PATH=/opt/comfyui-env/bin/:$PATH
 
-RUN mkdir -p /mnt/data/
-RUN chown pai-user:pai-user /mnt/data/
+RUN mkdir -p /mnt/comfyui/
+RUN chown pai-user:pai-user /mnt/comfyui/
 
 USER pai-user
 
