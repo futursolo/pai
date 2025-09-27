@@ -1,5 +1,5 @@
-ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-24.04:6.4.3-complete
-ARG BLAS_ROCM_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:blas-rocm-v6.4.3-20250823
+ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-24.04:7.0-complete
+ARG BLAS_ROCM_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:blas-rocm-v7.0.0-preview
 ARG KOBOLDCPP_ROCM_VERSION=v1.98.1.yr0-ROCm
 
 FROM alpine/git:2.49.1 AS build-git
@@ -24,9 +24,10 @@ COPY --from=build-git --chown=root:root /opt/koboldcpp-rocm /opt/koboldcpp
 WORKDIR /opt/koboldcpp
 
 ARG ROCM_PATH=/opt/rocm
-ARG ROCM_GPU_TARGETS="gfx803 gfx900 gfx906 gfx908 gfx90a gfx1010 gfx1030 gfx1031 gfx1032 gfx1100 gfx1101 gfx1102 gfx1200 gfx1201"
 
-RUN make LLAMA_HIPBLAS=1 GPU_TARGETS="${ROCM_GPU_TARGETS}" ALLAMDGPUS=1 -j$(nproc)
+ARG ROCM_GPU_TARGETS="gfx908 gfx90a gfx942 gfx950 gfx1030 gfx1100 gfx1101 gfx1151 gfx1200 gfx1201"
+
+RUN make LLAMA_HIPBLAS=1 GPU_TARGETS="${ROCM_GPU_TARGETS}" -j$(nproc)
 
 RUN rm -rf .git
 
@@ -50,7 +51,5 @@ USER pai-user
 WORKDIR /opt/koboldcpp
 
 SHELL ["/bin/bash", "-c"]
-
-ENV PATH=/opt/rocm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 ENTRYPOINT [ "/opt/koboldcpp/koboldcpp" ]
