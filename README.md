@@ -76,7 +76,7 @@ services:
     # ...
     group_add:
       - video
-      - $GROUP_ID_RENDER # This much match the group id of machine that runs the container, see above.
+      - $GROUP_ID_RENDER # This must match the group id of machine that runs the container, see above.
 ```
 
 Optionally, the container can enable CPU / GPU memory mapping to improve performance.
@@ -135,7 +135,7 @@ services:
     # ...
     group_add:
       - video
-      - $GROUP_ID_RENDER # This much match the group id of machine that runs the container, see above.
+      - $GROUP_ID_RENDER # This must match the group id of machine that runs the container, see above.
 ```
 
 Optionally, the container can enable CPU / GPU memory mapping to improve performance.
