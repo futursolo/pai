@@ -1,5 +1,5 @@
-ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-24.04:7.0-complete
-ARG ROCM_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:rocm-v7.0.0-20250927
+ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-24.04:7.1-complete
+ARG ROCM_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:rocm-v7.1.0-20251108
 
 FROM ${ROCM_DEV_IMAGE} AS build-rocm-blas
 
