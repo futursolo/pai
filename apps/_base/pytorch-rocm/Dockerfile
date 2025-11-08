@@ -5,9 +5,9 @@
 # You can link PyTorch dependencies to new virtual environments with:
 # `/_base/_scripts/python3-link-parent-env.sh [parent env]` after activating the child env.
 
-ARG ROCM_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:rocm-v7.0.0-20250927
+ARG ROCM_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:rocm-v7.1.0-20251108
 
-ARG PYTORCH_ENV_VERSION=v2.8.0-rocm-v7.0.0-vendor-rocm
+ARG PYTORCH_ENV_VERSION=v2.8.0-rocm-v7.1.0-vendor-rocm
 
 FROM ${ROCM_BASE_IMAGE} AS build-pytorch
 
