@@ -5,9 +5,9 @@
 # You can link PyTorch dependencies to new virtual environments with:
 # `/_base/_scripts/python3-link-parent-env.sh [parent env]` after activating the child env.
 
-ARG INTEL_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:intel-20250823
+ARG INTEL_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:intel-20251220
 
-ARG PYTORCH_ENV_VERSION=v2.8.0-ipex-v2.8.10
+ARG PYTORCH_ENV_VERSION=v2.9.1-ipex
 
 FROM ${INTEL_BASE_IMAGE} AS build-ipex-base
 
