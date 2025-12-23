@@ -32,7 +32,7 @@ RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
 RUN  --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
-    /tmp/_build/apt-install-rocm.sh
+    /tmp/_build/apt-install-rocm-dev.sh
 
 ENV ROCM_PATH=/opt/rocm
 ENV LD_LIBRARY_PATH=/opt/rocm/lib
