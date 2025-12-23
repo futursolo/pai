@@ -2,4 +2,4 @@
 
 set -ex
 
-apt-get install -y libjpeg-dev
+apt-get install -y libjpeg-dev miopen-hip
