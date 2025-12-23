@@ -2,4 +2,4 @@
 
 set -ex
 
-apt-get install -y rocblas hipblaslt
+apt-get install -y --no-install-recommends rocm-hip-libraries
