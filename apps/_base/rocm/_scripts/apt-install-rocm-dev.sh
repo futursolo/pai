@@ -2,4 +2,4 @@
 
 set -ex
 
-apt-get install -y rocm
+apt-get install -y rocm-dev
