@@ -1,4 +1,4 @@
-ARG ROCM_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:rocm-v7.1.1-20251220
+ARG ROCM_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:rocm-v7.1.1-20251223
 
 FROM ${ROCM_BASE_IMAGE} AS build-final
 
