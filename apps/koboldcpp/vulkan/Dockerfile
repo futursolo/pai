@@ -1,6 +1,6 @@
 ARG VULKAN_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:vulkan-20250823
 
-ARG KOBOLDCPP_VERSION=v1.104
+ARG KOBOLDCPP_VERSION=v1.105
 
 FROM ubuntu:24.04 AS build-koboldcpp
 
