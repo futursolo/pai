@@ -1,6 +1,6 @@
 ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-24.04:7.1.1-complete
 ARG BLAS_ROCM_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:blas-rocm-v7.1.1-20251223
-ARG LLAMA_CPP_VERSION=b7489
+ARG LLAMA_CPP_VERSION=b7609
 
 FROM alpine/git:2.49.1 AS build-git
 
