@@ -10,7 +10,6 @@ on:
           - koboldcpp
           - comfyui
           - ollama
-          - llama.cpp
       variant:
         description: "Image Variant"
         required: true
