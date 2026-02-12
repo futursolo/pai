@@ -1,5 +1,5 @@
 ARG PYTORCH_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:pytorch-v2.9.1-rocm-v7.1.1-20251223
-ARG COMFYUI_VERSION=v0.11.1
+ARG COMFYUI_VERSION=v0.13.0
 
 FROM alpine/git:2.49.1 AS build-git
 
@@ -8,7 +8,7 @@ ARG COMFYUI_VERSION
 WORKDIR /opt/
 RUN git clone --depth 1 \
     --branch ${COMFYUI_VERSION} \
-    https://github.com/comfyanonymous/ComfyUI.git
+    https://github.com/Comfy-Org/ComfyUI.git
 
 FROM ubuntu:24.04 AS build-comfyui
 
