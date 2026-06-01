@@ -9,7 +9,6 @@ on:
         options:
           - koboldcpp
           - comfyui
-          - ollama
       variant:
         description: "Image Variant"
         required: true
