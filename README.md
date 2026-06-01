@@ -33,8 +33,6 @@ and CUDA-based images are usually already available from other sources.
 - [ComfyUI](./apps/comfyui/README.md)
   - `rocm`: `ghcr.io/futursolo/pai-apps/comfyui:rocm`
   - `ipex`: `ghcr.io/futursolo/pai-apps/comfyui:ipex`
-- [Ollama](./apps/ollama/README.md)
-  - `intel`: `ghcr.io/futursolo/pai-apps/ollama:intel`
 
 ### Permissions and Capabilities
 
