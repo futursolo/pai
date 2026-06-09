@@ -1,5 +1,5 @@
-ARG ROCM_VERSION=7.1.1
-ARG PYTORCH_ENV_VERSION=v2.9.1-rocm-v7.1.1-vendor-rocm
+ARG ROCM_VERSION=7.2.4
+ARG PYTORCH_ENV_VERSION=v2.11.0-rocm-v7.2.4-vendor-pytorch
 
 FROM ubuntu:24.04 AS build-rocm-final
 
@@ -10,26 +10,26 @@ ENV TZ=Etc/UTC
 RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
     /tmp/_build/create-pai-user.sh
 
-RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
-    --mount=type=bind,source=./_base/_scripts/apt-pre.sh,target=/tmp/_build/apt-pre.sh \
+RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/base/ \
+    --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/rocm/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
-    /tmp/_build/apt-pre.sh && \
-    /tmp/_build/apt-install-python3.sh
+    /tmp/_build/base/apt-pre.sh && \
+    /tmp/_build/base/apt-install-python3.sh
 
-RUN  --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/ \
-    --mount=type=bind,source=./_base/_scripts/apt-pre.sh,target=/tmp/_build/apt-pre.sh \
+RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/base/ \
+    --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/rocm/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
-    /tmp/_build/apt-pre.sh && \
-    /tmp/_build/apt-add-rocm-repo.sh
+    /tmp/_build/base/apt-pre.sh && \
+    /tmp/_build/rocm/apt-add-rocm-repo.sh
 
-RUN  --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/ \
-    --mount=type=bind,source=./_base/_scripts/apt-pre.sh,target=/tmp/_build/apt-pre.sh \
+RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/base/ \
+    --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/rocm/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
-    /tmp/_build/apt-pre.sh && \
-    /tmp/_build/apt-install-rocm-dev.sh
+    /tmp/_build/base/apt-pre.sh && \
+    /tmp/_build/rocm/apt-install-rocm-dev.sh
 
 ENV ROCM_PATH=/opt/rocm
 ENV LD_LIBRARY_PATH=/opt/rocm/lib
@@ -37,21 +37,21 @@ ENV PATH=/opt/rocm/bin:$PATH
 
 FROM build-rocm-final AS build-blas-rocm-final
 
-RUN  --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/ \
-    --mount=type=bind,source=./_base/_scripts/apt-pre.sh,target=/tmp/_build/apt-pre.sh \
+RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/base/ \
+    --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/rocm/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
-    /tmp/_build/apt-pre.sh && \
-    /tmp/_build/apt-install-blas-rocm-deps.sh
+    /tmp/_build/base/apt-pre.sh && \
+    /tmp/_build/rocm/apt-install-blas-rocm-deps.sh
 
 FROM build-blas-rocm-final AS build-pytorch-rocm-deps
 
-RUN  --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/ \
-    --mount=type=bind,source=./_base/_scripts/apt-pre.sh,target=/tmp/_build/apt-pre.sh \
+RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/base/ \
+    --mount=type=bind,source=./_base/rocm/_scripts/,target=/tmp/_build/rocm/ \
     --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
-    /tmp/_build/apt-pre.sh && \
-    /tmp/_build/apt-install-pytorch-rocm-deps.sh
+    /tmp/_build/base/apt-pre.sh && \
+    /tmp/_build/rocm/apt-install-pytorch-rocm-deps.sh
 
 FROM build-pytorch-rocm-deps AS build-pytorch
 
