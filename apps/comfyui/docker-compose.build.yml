@@ -1,0 +1,32 @@
+---
+name: build-comfyui
+
+services:
+  rocm:
+    build:
+      dockerfile: ./comfyui/rocm/Dockerfile
+      context: ../
+      target: build-final
+      args:
+        - PYTORCH_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:pytorch-v2.11.0-rocm-v7.2.4-preview
+        - COMFYUI_VERSION=v0.24.0
+    platform: linux/amd64
+    image: ghcr.io/futursolo/pai-apps/comfyui:v0.24.0-pytorch-v2.11.0-rocm-v7.2.4
+  rocm-variant:
+    extends: rocm
+    image: ghcr.io/futursolo/pai-apps/comfyui:rocm
+
+  xpu:
+    build:
+      dockerfile: ./comfyui/xpu/Dockerfile
+      context: ../
+      target: build-final
+      args:
+        - PYTORCH_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:pytorch-v2.11.0-xpu-preview
+        - COMFYUI_VERSION=v0.24.0
+    platform: linux/amd64
+    image: ghcr.io/futursolo/pai-apps/comfyui:v0.24.0-pytorch-v2.11.0-xpu
+  xpu-variant:
+    extends: xpu
+    image: ghcr.io/futursolo/pai-apps/comfyui:xpu
+
