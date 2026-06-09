@@ -6,7 +6,46 @@ services:
     build:
       dockerfile: ./_base/rocm/Dockerfile
       context: ../..
+      target: build-rocm-final
     image: ghcr.io/futursolo/pai-apps/base:rocm
+    devices:
+      - /dev/dri
+      - /dev/kfd
+    environment:
+      HSA_OVERRIDE_GFX_VERSION: 11.0.0
+      PYTORCH_ROCM_ARCH: gfx1100
+    group_add:
+      - video
+      - $GROUP_ID_RENDER  # See README.md about how to obtain this ID.
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
+
+  blas-rocm:
+    build:
+      dockerfile: ./_base/blas-rocm/Dockerfile
+      context: ../..
+      target: build-blas-rocm-final
+    image: ghcr.io/futursolo/pai-apps/base:blas-rocm
+    devices:
+      - /dev/dri
+      - /dev/kfd
+    environment:
+      HSA_OVERRIDE_GFX_VERSION: 11.0.0
+      PYTORCH_ROCM_ARCH: gfx1100
+    group_add:
+      - video
+      - $GROUP_ID_RENDER  # See README.md about how to obtain this ID.
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
+
+  pytorch-rocm:
+    build:
+      dockerfile: ./_base/pytorch-rocm/Dockerfile
+      context: ../..
+      target: build-pytorch-rocm-final
+    image: ghcr.io/futursolo/pai-apps/base:pytorch-rocm
     devices:
       - /dev/dri
       - /dev/kfd
