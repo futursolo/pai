@@ -57,6 +57,6 @@ RUN --mount=type=bind,source=./_base/pytorch-ipex/_scripts/,target=/tmp/_build/ 
 
 FROM build-pytorch-xpu-base AS build-pytorch-xpu-final
 
-COPY --from=build-pytorch --chown=root:root /opt/pytorch-env /opt/pytorch-env
+COPY --from=build-pytorch-xpu --chown=root:root /opt/pytorch-env /opt/pytorch-env
 
 ENV PATH=/opt/pytorch-env/bin/:$PATH
