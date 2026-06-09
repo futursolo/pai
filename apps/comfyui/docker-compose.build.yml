@@ -29,4 +29,3 @@ services:
   xpu-variant:
     extends: xpu
     image: ghcr.io/futursolo/pai-apps/comfyui:xpu
-
