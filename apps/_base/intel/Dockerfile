@@ -1,4 +1,4 @@
-ARG PYTORCH_ENV_VERSION=v2.9.1-ipex
+ARG PYTORCH_ENV_VERSION=v2.9.1-xpu
 
 FROM ubuntu:24.04 AS build-intel-final
 

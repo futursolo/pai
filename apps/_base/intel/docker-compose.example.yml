@@ -23,7 +23,7 @@ services:
 
   pytorch-xpu:
     build:
-      dockerfile: ./_base/pytorch-ipex/Dockerfile
+      dockerfile: ./_base/intel/Dockerfile
       context: ../..
       target: build-pytorch-xpu-final
     image: ghcr.io/futursolo/pai-apps/base:pytorch-xpu
