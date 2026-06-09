@@ -50,7 +50,7 @@ RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
 
 RUN python3 -m venv /opt/pytorch-env/
 
-RUN --mount=type=bind,source=./_base/pytorch-ipex/_scripts/,target=/tmp/_build/ \
+RUN --mount=type=bind,source=./_base/intel/_scripts/,target=/tmp/_build/ \
     env \
     PATH="/opt/pytorch-env/bin:$PATH" \
     /tmp/_build/python3.12-install-pytorch-${PYTORCH_ENV_VERSION}.sh
