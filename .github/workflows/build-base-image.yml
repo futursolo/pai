@@ -1,25 +1,13 @@
 ---
 on:
   workflow_dispatch:
-    inputs:
-      variant:
-        description: "Image Variant"
-        required: true
-        type: choice
-        options:
-          - pytorch-rocm
-          - pytorch-ipex
-          - intel
-          - vulkan
-          - rocm
-          - blas-rocm
 
 name: Build Base Container
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build base:${{ github.event.inputs.variant }}
+    name: Build Base Containers
     permissions:
       contents: write
       packages: write
@@ -64,31 +52,27 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Read Version
-        run: echo "BASE_IMAGE_VERSION=$(cat .image-version)" >> $GITHUB_ENV
-        working-directory: "apps/_base/${{ github.event.inputs.variant }}"
-
-      - name: Define Versions (Release)
+      - name: Define Image Suffixs (Release)
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           _DATE_VER=$(date +'%Y%m%d')
-          IMAGE_VERSION=${BASE_IMAGE_VERSION}-${_DATE_VER}
+          IMAGE_VERSION_SUFFIX=-${_DATE_VER}
+          IMAGE_VARIANT_SUFFIX=""
 
-          echo "IMAGE_VERSION=${IMAGE_VERSION}" >> $GITHUB_ENV
+          echo "PAI_BUILD_VERSION_SUFFIX=${IMAGE_VERSION_SUFFIX}" >> $GITHUB_ENV
+          echo "PAI_BUILD_VARIANT_SUFFIX=${IMAGE_VARIANT_SUFFIX}" >> $GITHUB_ENV
 
-      - name: Define Versions (Preview)
+      - name: Define Image Suffixs (Release)
         if: ${{ github.ref != 'refs/heads/main' }}
         run: |
-          _DATE_VER=$(date +'%Y%m%d')
-          IMAGE_VERSION=${BASE_IMAGE_VERSION}-preview
+          IMAGE_VERSION_SUFFIX=-preview
+          IMAGE_VARIANT_SUFFIX=-preview
 
-          echo "IMAGE_VERSION=${IMAGE_VERSION}" >> $GITHUB_ENV
+          echo "PAI_BUILD_VERSION_SUFFIX=${IMAGE_VERSION_SUFFIX}" >> $GITHUB_ENV
+          echo "PAI_BUILD_VARIANT_SUFFIX=${IMAGE_VARIANT_SUFFIX}" >> $GITHUB_ENV
 
-      - name: Build and Push base:${{ env.IMAGE_VERSION }}
-        uses: docker/build-push-action@v6
-        with:
-          context: apps/
-          file: apps/_base/${{ github.event.inputs.variant }}/Dockerfile
-          push: true
-          tags: |
-            ghcr.io/futursolo/pai-apps/base:${{ env.IMAGE_VERSION }}
+      - name: Build and Push Base Images
+        run: |
+          docker compose -f docker-compose.build.yml build
+          docker compose -f docker-compose.build.yml push
+        working-directory: apps/_base

@@ -6,6 +6,7 @@ services:
     build:
       dockerfile: ./_base/intel/Dockerfile
       context: ../..
+      target: build-intel-final
     image: ghcr.io/futursolo/pai-apps/base:intel
     devices:
       - /dev/dri
@@ -19,3 +20,26 @@ services:
     # WSL Only
     volumes:
       - /usr/lib/wsl:/usr/lib/wsl
+
+  pytorch-xpu:
+    build:
+      dockerfile: ./_base/intel/Dockerfile
+      context: ../..
+      target: build-pytorch-xpu-final
+    image: ghcr.io/futursolo/pai-apps/base:pytorch-xpu
+    # image: intelanalytics/ipex-llm-inference-cpp-xpu:latest
+    devices:
+      - /dev/dri
+    group_add:
+      - video
+      - $GROUP_ID_RENDER  # See README.md about how to obtain this ID.
+
+    # WSL Only
+    privileged: true
+    # WSL Only
+    volumes:
+      - /usr/lib/wsl:/usr/lib/wsl
+
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
