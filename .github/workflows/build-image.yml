@@ -13,12 +13,42 @@ on:
 name: Build Container
 
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+
+      - name: Setup Uv
+        uses: astral-sh/setup-uv@v8.2.0
+        with:
+          working-directory: helpers
+          enable-cache: true
+
+      - name: Install Dependencies
+        run: uv sync
+        working-directory: helpers
+
+      - name: Prepare Build Info
+        run: |
+          _PREPARED_BUILDS=$(
+            uv run paictl \
+              prepare-builds \
+                --src=../apps/${{ github.event.inputs.name }}/docker-compose.build.yml
+          )
+
+          echo "builds=$_PREPARED_BUILDS" >> "$GITHUB_OUTPUT"
+        working-directory: helpers
+
   build:
     runs-on: ubuntu-latest
-    name: Build ${{ github.event.inputs.name }}:${{ github.event.inputs.variant }}
+    name: Build ${{ github.event.inputs.name }}:${{ matrix.build.variant }}
+    needs: prepare
     permissions:
       contents: write
       packages: write
+      matrix:
+        build: ${{ fromJSON(needs.prepare.outputs.builds) }}
 
     steps:
       - name: Stop Docker Service
@@ -83,12 +113,16 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           _DATE_VER=$(date +'%Y%m%d')
-          RELEASE_TAG=${{ github.event.inputs.name }}-${_DATE_VER}
+          RELEASE_TAG=${{ github.event.inputs.name }}-${{ matrix.build.version }}${PAI_BUILD_VERSION_SUFFIX}
+
+          echo "RELEASE_TAG=${RELEASE_TAG}" >> $GITHUB_ENV
 
       - name: Build and Push Base Images
         run: |
-          docker compose -f docker-compose.build.yml build
-          docker compose -f docker-compose.build.yml push
+          docker compose -f docker-compose.build.yml build ${{ matrix.build.variant }}
+          docker compose -f docker-compose.build.yml push ${{ matrix.build.variant }}
+          docker compose -f docker-compose.build.yml build ${{ matrix.build.variant }}-variant
+          docker compose -f docker-compose.build.yml push ${{ matrix.build.variant }}-variant
         working-directory: apps/${{ github.event.inputs.name }}
 
       - name: Create Release
@@ -101,3 +135,7 @@ jobs:
           target_commitish: ${{ github.sha }}
           body: |
             Image: `${{ github.event.inputs.name }}`
+            Variant: `${{ matrix.build.variant }}${{ env.IMAGE_VARIANT_SUFFIX }}`
+            Version: `${{ env.IMAGE_VERSION }}`
+            URI: `ghcr.io/futursolo/pai-apps/${{ github.event.inputs.name }}:${{ matrix.build.variant }}`
+            URI: `ghcr.io/futursolo/pai-apps/${{ github.event.inputs.name }}:${{ matrix.build.version }}${{ env.PAI_BUILD_VERSION_SUFFIX }}`
