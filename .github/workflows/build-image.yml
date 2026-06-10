@@ -47,6 +47,7 @@ jobs:
     permissions:
       contents: write
       packages: write
+    strategy:
       matrix:
         build: ${{ fromJSON(needs.prepare.outputs.builds) }}
 
