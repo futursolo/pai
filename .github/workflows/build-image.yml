@@ -16,7 +16,7 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
-      builds: ${{ steps.prepare-builds.outputs.test }}
+      builds: ${{ steps.prepare-builds.outputs.builds }}
     steps:
       - name: Checkout Project
         uses: actions/checkout@v4
