@@ -40,7 +40,7 @@ jobs:
                 --src=../apps/${{ github.event.inputs.name }}/docker-compose.build.yml
           )
 
-          echo "builds='$_PREPARED_BUILDS'" >> "$GITHUB_OUTPUT"
+          echo "builds=$_PREPARED_BUILDS" >> "$GITHUB_OUTPUT"
         working-directory: helpers
 
   build:
