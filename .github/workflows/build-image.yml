@@ -130,7 +130,7 @@ jobs:
         working-directory: apps/${{ github.event.inputs.name }}
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
