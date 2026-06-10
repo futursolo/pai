@@ -43,7 +43,7 @@ jobs:
           sudo systemctl start docker.socket
 
       - name: Checkout Project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Log in to ghcr.io
         uses: docker/login-action@v3
