@@ -2,3 +2,5 @@
 test-models/
 # Test Data
 test-data/
+
+__pycache__/
