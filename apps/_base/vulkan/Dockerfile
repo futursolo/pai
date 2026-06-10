@@ -1,4 +1,4 @@
-FROM ubuntu:24.04 AS build-vulkan-final
+FROM ubuntu:26.04 AS build-vulkan-final
 
 ENV TZ=Etc/UTC
 
