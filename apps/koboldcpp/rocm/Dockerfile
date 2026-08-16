@@ -1,6 +1,5 @@
-ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-24.04:7.1.1-complete
-ARG BLAS_ROCM_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:blas-rocm-v7.1.1-20251223
-ARG KOBOLDCPP_VERSION=v1.114.1
+ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-26.04:7.14.0-full
+ARG KOBOLDCPP_VERSION=v1.119
 
 FROM alpine/git:2.52.0 AS build-git
 
@@ -37,7 +36,10 @@ RUN env \
 
 RUN chmod 755 dist/koboldcpp-linux-x64-rocm
 
-FROM ${BLAS_ROCM_BASE_IMAGE} AS build-final
+FROM ubuntu:26.04 AS build-final
+
+RUN  --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+    /tmp/_build/create-pai-user.sh
 
 COPY --from=build-koboldcpp /opt/koboldcpp/dist/koboldcpp-linux-x64-rocm /opt/koboldcpp/koboldcpp
 
