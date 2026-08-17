@@ -30,7 +30,9 @@ WORKDIR /opt/koboldcpp
 
 SHELL ["/bin/bash", "-c"]
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:5001/api/health || exit 1
+ENV PAI_HEALTHCHECK_URL=http://localhost:5001/
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=300s --retries=3 \
+    CMD curl -f "$PAI_HEALTHCHECK_URL" || exit 1
 
 ENTRYPOINT [ "/opt/koboldcpp/koboldcpp" ]

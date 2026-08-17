@@ -66,7 +66,9 @@ ENV COMFYUI_DB_URL="sqlite:////mnt/comfyui/user/comfyui.db"
 
 VOLUME /mnt/comfyui
 
+ENV PAI_HEALTHCHECK_URL=http://localhost:8188/
+
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:8188/ || exit 1
+    CMD curl -f "$PAI_HEALTHCHECK_URL" || exit 1
 
 ENTRYPOINT [ "/entrypoint.sh" ]
