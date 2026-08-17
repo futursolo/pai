@@ -4,9 +4,9 @@ name: example-comfyui
 services:
   comfyui:
     build:
-      dockerfile: ./comfyui/ipex/Dockerfile
+      dockerfile: ./comfyui/xpu/Dockerfile
       context: ../..
-    image: ghcr.io/futursolo/pai-apps/comfyui:ipex
+    image: ghcr.io/futursolo/pai-apps/comfyui:xpu
     devices:
       - /dev/dri
     shm_size: 16G

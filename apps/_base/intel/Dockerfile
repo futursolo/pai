@@ -1,4 +1,4 @@
-ARG PYTORCH_ENV_VERSION=v2.11.0-xpu
+ARG PYTORCH_ENV_VERSION=v2.13.0-xpu
 
 FROM ubuntu:26.04 AS build-intel-final
 
@@ -44,7 +44,7 @@ RUN python3 -m venv /opt/pytorch-env/
 RUN --mount=type=bind,source=./_base/intel/_scripts/,target=/tmp/_build/ \
     env \
     PATH="/opt/pytorch-env/bin:$PATH" \
-    /tmp/_build/python3.12-install-pytorch-${PYTORCH_ENV_VERSION}.sh
+    /tmp/_build/python3.14-install-pytorch-${PYTORCH_ENV_VERSION}.sh
 
 FROM build-pytorch-xpu-base AS build-pytorch-xpu-final
 
