@@ -15,6 +15,12 @@ RUN chmod 755 /tmp/koboldcpp-linux-x64-nocuda
 
 FROM ${VULKAN_BASE_IMAGE} AS build-final
 
+RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    /tmp/_build/apt-pre.sh && \
+    /tmp/_build/apt-install-curl.sh
+
 RUN mkdir -p /opt/koboldcpp
 COPY --from=build-koboldcpp --chown=root:root /tmp/koboldcpp-linux-x64-nocuda /opt/koboldcpp/koboldcpp
 
@@ -23,5 +29,8 @@ USER pai-user
 WORKDIR /opt/koboldcpp
 
 SHELL ["/bin/bash", "-c"]
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:5001/api/health || exit 1
 
 ENTRYPOINT [ "/opt/koboldcpp/koboldcpp" ]
