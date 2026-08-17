@@ -1,5 +1,5 @@
-ARG PYTORCH_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:pytorch-v2.9.1-ipex-20251220
-ARG COMFYUI_VERSION=v0.22.0
+ARG PYTORCH_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:pytorch-v2.13.0-xpu-20260817
+ARG COMFYUI_VERSION=v0.33.1
 
 FROM alpine/git:2.52.0 AS build-git
 
