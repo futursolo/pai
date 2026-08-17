@@ -22,7 +22,7 @@ services:
       context: ../
       target: build-final
       args:
-        - VULKAN_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:vulkan-20260610
+        - VULKAN_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:vulkan-20260817
         - KOBOLDCPP_VERSION=v1.119
     platform: linux/amd64
     image: ghcr.io/futursolo/pai-apps/koboldcpp:v1.119.0-vulkan${PAI_BUILD_VERSION_SUFFIX}
