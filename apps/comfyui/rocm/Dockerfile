@@ -37,6 +37,12 @@ RUN env \
 
 FROM ${PYTORCH_BASE_IMAGE} AS build-final
 
+RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
+    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    /tmp/_build/apt-pre.sh && \
+    /tmp/_build/apt-install-curl.sh
+
 COPY --from=build-comfyui /opt/comfyui /opt/comfyui
 COPY --from=build-comfyui /opt/comfyui-base-tpl /opt/comfyui-base-tpl
 COPY --from=build-comfyui-env /opt/comfyui-env /opt/comfyui-env
@@ -59,5 +65,10 @@ ENV COMFYUI_BASE_DIR="/mnt/comfyui"
 ENV COMFYUI_DB_URL="sqlite:////mnt/comfyui/user/comfyui.db"
 
 VOLUME /mnt/comfyui
+
+ENV PAI_HEALTHCHECK_URL=http://localhost:8188/
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
+    CMD curl -f "$PAI_HEALTHCHECK_URL" || exit 1
 
 ENTRYPOINT [ "/entrypoint.sh" ]
