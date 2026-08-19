@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Setup Uv
-        uses: astral-sh/setup-uv@v9.0.0
+        uses: astral-sh/setup-uv@v10.0.1
         with:
           working-directory: helpers
           enable-cache: true
