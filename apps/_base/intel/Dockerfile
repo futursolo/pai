@@ -29,6 +29,13 @@ RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/base/ \
     /tmp/_build/base/apt-pre.sh && \
     /tmp/_build/base/apt-install-python3.sh
 
+RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/base/ \
+    --mount=type=bind,source=./_base/intel/_scripts/,target=/tmp/_build/intel/ \
+    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    /tmp/_build/base/apt-pre.sh && \
+    /tmp/_build/intel/apt-install-pytorch-xpu-deps.sh
+
 FROM build-pytorch-xpu-base AS build-pytorch-xpu
 
 ARG PYTORCH_ENV_VERSION
