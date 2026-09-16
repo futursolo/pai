@@ -1,5 +1,5 @@
 ARG ROCM_DEV_IMAGE=rocm/dev-ubuntu-26.04:7.14.0-full
-ARG KOBOLDCPP_VERSION=v1.119
+ARG KOBOLDCPP_VERSION=v1.121
 
 FROM alpine/git:2.52.0 AS build-git
 
