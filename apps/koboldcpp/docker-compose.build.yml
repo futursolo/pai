@@ -9,9 +9,9 @@ services:
       target: build-final
       args:
         - ROCM_DEV_IMAGE=rocm/dev-ubuntu-26.04:7.14.0-full
-        - KOBOLDCPP_VERSION=v1.119
+        - KOBOLDCPP_VERSION=v1.121
     platform: linux/amd64
-    image: ghcr.io/futursolo/pai-apps/koboldcpp:v1.119.0-rocm-v7.14.0${PAI_BUILD_VERSION_SUFFIX}
+    image: ghcr.io/futursolo/pai-apps/koboldcpp:v1.121.0-rocm-v7.14.0${PAI_BUILD_VERSION_SUFFIX}
   rocm-variant:
     extends: rocm
     image: ghcr.io/futursolo/pai-apps/koboldcpp:rocm${PAI_BUILD_VARIANT_SUFFIX}
@@ -23,9 +23,9 @@ services:
       target: build-final
       args:
         - VULKAN_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:vulkan-20260817
-        - KOBOLDCPP_VERSION=v1.119
+        - KOBOLDCPP_VERSION=v1.121
     platform: linux/amd64
-    image: ghcr.io/futursolo/pai-apps/koboldcpp:v1.119.0-vulkan${PAI_BUILD_VERSION_SUFFIX}
+    image: ghcr.io/futursolo/pai-apps/koboldcpp:v1.121.0-vulkan${PAI_BUILD_VERSION_SUFFIX}
   vulkan-variant:
     extends: vulkan
     image: ghcr.io/futursolo/pai-apps/koboldcpp:vulkan${PAI_BUILD_VARIANT_SUFFIX}
