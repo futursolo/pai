@@ -24,7 +24,7 @@ services:
       dockerfile: ./_base/intel/Dockerfile
       context: ../
     platform: linux/amd64
-    image: ghcr.io/futursolo/pai-apps/base:pytorch-v2.13.0-xpu${PAI_BUILD_VERSION_SUFFIX}
+    image: ghcr.io/futursolo/pai-apps/base:pytorch-v2.14.1-xpu${PAI_BUILD_VERSION_SUFFIX}
 
   vulkan:
     build:

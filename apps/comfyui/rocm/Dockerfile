@@ -37,12 +37,6 @@ RUN env \
 
 FROM ${PYTORCH_BASE_IMAGE} AS build-final
 
-RUN --mount=type=bind,source=./_base/_scripts/,target=/tmp/_build/ \
-    --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
-    --mount=target=/var/cache/apt,type=cache,sharing=locked \
-    /tmp/_build/apt-pre.sh && \
-    /tmp/_build/apt-install-curl.sh
-
 COPY --from=build-comfyui /opt/comfyui /opt/comfyui
 COPY --from=build-comfyui /opt/comfyui-base-tpl /opt/comfyui-base-tpl
 COPY --from=build-comfyui-env /opt/comfyui-env /opt/comfyui-env
