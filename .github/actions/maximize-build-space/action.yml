@@ -25,7 +25,7 @@ runs:
       env:
         DAEMON_JSON: |
           {
-            "data-root": "${{ inputs.build-mount-path }}"
+            "data-root": "${{ inputs.build-mount-path }}/docker"
           }
       run: |
         sudo mkdir -p /etc/docker
@@ -36,7 +36,7 @@ runs:
       env:
         CONTAINERD_TOML: |
           version = 2
-          root = "${{ inputs.build-mount-path }}"
+          root = "${{ inputs.build-mount-path }}/containerd"
           state = "/run/containerd"
       run: |
         sudo mkdir -p /etc/containerd
