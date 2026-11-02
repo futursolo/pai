@@ -1,0 +1,77 @@
+name: Maximize build space for container runtimes
+description: >-
+  Mounts the LVM build volume at a dedicated "special path" and configures both
+  Docker (data-root) and containerd (root) to use it, so image builds get extra
+  disk space whether the runner uses Docker or containerd.
+inputs:
+  build-mount-path:
+    description: >-
+      The special path used both as the LVM build volume mount point and as the
+      data root for the container runtime (Docker data-root / containerd root).
+    required: false
+    default: /var/lib/pai-build
+runs:
+  using: composite
+  steps:
+    - name: Stop container runtimes
+      shell: bash
+      run: |
+        sudo systemctl stop docker.service
+        sudo systemctl stop docker.socket
+        sudo systemctl stop containerd.service
+
+    - name: Configure Docker data-root
+      shell: bash
+      env:
+        DAEMON_JSON: |
+          {
+            "data-root": "${{ inputs.build-mount-path }}/docker"
+          }
+      run: |
+        sudo mkdir -p /etc/docker
+        echo "$DAEMON_JSON" | sudo tee /etc/docker/daemon.json
+
+    - name: Configure containerd root
+      shell: bash
+      env:
+        CONTAINERD_TOML: |
+          version = 2
+          root = "${{ inputs.build-mount-path }}/containerd"
+          state = "/run/containerd"
+      run: |
+        sudo mkdir -p /etc/containerd
+        echo "$CONTAINERD_TOML" | sudo tee /etc/containerd/config.toml
+
+    - name: Prepare special path
+      shell: bash
+      run: |
+        sudo rm -rf "${{ inputs.build-mount-path }}"
+        sudo mkdir -p "${{ inputs.build-mount-path }}"
+
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        root-reserve-mb: 1024
+        swap-size-mb: 1024
+        remove-dotnet: "true"
+        remove-android: "true"
+        remove-haskell: "true"
+        remove-codeql: "true"
+        build-mount-path: ${{ inputs.build-mount-path }}
+
+    - name: Create runtime data dirs
+      shell: bash
+      run: |
+        sudo mkdir -p "${{ inputs.build-mount-path }}/docker"
+        sudo mkdir -p "${{ inputs.build-mount-path }}/containerd"
+
+    - name: Show disk space
+      shell: bash
+      run: df -h
+
+    - name: Start container runtimes
+      shell: bash
+      run: |
+        sudo systemctl start docker.service
+        sudo systemctl start docker.socket
+        sudo systemctl start containerd.service
