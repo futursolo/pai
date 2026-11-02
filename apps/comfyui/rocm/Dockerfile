@@ -10,7 +10,7 @@ RUN git clone --depth 1 \
     --branch ${COMFYUI_VERSION} \
     https://github.com/Comfy-Org/ComfyUI.git
 
-FROM ubuntu:24.04 AS build-comfyui
+FROM ubuntu:26.04 AS build-comfyui
 
 COPY --from=build-git --chown=root:root /opt/ComfyUI /opt/comfyui
 

@@ -1,6 +1,6 @@
 ARG PYTORCH_ENV_VERSION=v2.14.0-rocm-v10.1.0-vendor-rocm
 
-FROM ubuntu:24.04 AS build-pytorch-rocm-deps
+FROM ubuntu:26.04 AS build-pytorch-rocm-deps
 
 ENV TZ=Etc/UTC
 
