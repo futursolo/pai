@@ -59,6 +59,12 @@ runs:
         remove-codeql: "true"
         build-mount-path: ${{ inputs.build-mount-path }}
 
+    - name: Create runtime data dirs
+      shell: bash
+      run: |
+        sudo mkdir -p "${{ inputs.build-mount-path }}/docker"
+        sudo mkdir -p "${{ inputs.build-mount-path }}/containerd"
+
     - name: Show disk space
       shell: bash
       run: df -h
