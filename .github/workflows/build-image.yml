@@ -55,14 +55,14 @@ jobs:
         build: ${{ fromJSON(needs.prepare.outputs.builds) }}
 
     steps:
+      - name: Checkout Project
+        uses: actions/checkout@v7
+
       - name: Maximize build space
-        uses: ./actions/maximize-build-space
+        uses: ./.github/actions/maximize-build-space
         with:
           # Special path shared by Docker (data-root) and containerd (root).
           build-mount-path: /var/lib/pai-build
-
-      - name: Checkout Project
-        uses: actions/checkout@v7
 
       - name: Log in to ghcr.io
         uses: docker/login-action@v4
