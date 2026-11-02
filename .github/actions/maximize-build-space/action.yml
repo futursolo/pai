@@ -16,45 +16,31 @@ runs:
     - name: Stop container runtimes
       shell: bash
       run: |
-        set -uo pipefail
-        for svc in docker.service docker.socket containerd.service; do
-          if systemctl list-unit-files --no-legend 2>/dev/null | awk '{print $1}' | grep -qxF "$svc"; then
-            sudo systemctl stop "$svc"
-          fi
-        done
+        sudo systemctl stop docker.service
+        sudo systemctl stop docker.socket
+        sudo systemctl stop containerd.service
 
     - name: Configure Docker data-root
       shell: bash
+      env:
+        DAEMON_JSON: |
+          {
+            "data-root": "${{ inputs.build-mount-path }}"
+          }
       run: |
         sudo mkdir -p /etc/docker
-        sudo python3 - "${{ inputs.build-mount-path }}" <<'PY'
-        import json, sys
-        path = "/etc/docker/daemon.json"
-        data = {}
-        try:
-            with open(path) as f:
-                data = json.load(f)
-        except Exception:
-            data = {}
-        data["data-root"] = sys.argv[1]
-        with open(path, "w") as f:
-            json.dump(data, f, indent=2)
-            f.write("\n")
-        PY
+        echo "$DAEMON_JSON" | sudo tee /etc/docker/daemon.json
 
     - name: Configure containerd root
       shell: bash
+      env:
+        CONTAINERD_TOML: |
+          version = 2
+          root = "${{ inputs.build-mount-path }}"
+          state = "/run/containerd"
       run: |
-        if command -v containerd &>/dev/null; then
-          special="${{ inputs.build-mount-path }}"
-          sudo mkdir -p /etc/containerd
-          containerd config default \
-            | sed "s|^root = .*|root = \"${special}\"|" \
-            | sudo tee /etc/containerd/config.toml >/dev/null
-          echo "containerd root set to ${special}"
-        else
-          echo "containerd not installed; skipping containerd config"
-        fi
+        sudo mkdir -p /etc/containerd
+        echo "$CONTAINERD_TOML" | sudo tee /etc/containerd/config.toml
 
     - name: Prepare special path
       shell: bash
@@ -80,19 +66,6 @@ runs:
     - name: Start container runtimes
       shell: bash
       run: |
-        set -uo pipefail
-        started=0
-        if systemctl list-unit-files --no-legend 2>/dev/null | awk '{print $1}' | grep -qxF "docker.service"; then
-          sudo systemctl start docker.service docker.socket
-          started=1
-          echo "Started docker.service"
-        fi
-        if systemctl list-unit-files --no-legend 2>/dev/null | awk '{print $1}' | grep -qxF "containerd.service"; then
-          sudo systemctl start containerd.service
-          started=1
-          echo "Started containerd.service"
-        fi
-        if [ "$started" -eq 0 ]; then
-          echo "::error::No container runtime (docker or containerd) service found to start."
-          exit 1
-        fi
+        sudo systemctl start docker.service
+        sudo systemctl start docker.socket
+        sudo systemctl start containerd.service
