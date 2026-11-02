@@ -2,4 +2,4 @@
 
 set -ex
 
-apt-get install -y curl
+apt-get install -y curl ca-certificates
