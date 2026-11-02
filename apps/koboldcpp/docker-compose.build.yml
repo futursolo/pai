@@ -8,10 +8,10 @@ services:
       context: ../
       target: build-final
       args:
-        - ROCM_DEV_IMAGE=rocm/dev-ubuntu-26.04:7.14.0-full
+        - ROCM_DEV_IMAGE=rocm/dev-ubuntu-26.04:10.1.0-full
         - KOBOLDCPP_VERSION=v1.121
     platform: linux/amd64
-    image: ghcr.io/futursolo/pai-apps/koboldcpp:v1.121.0-rocm-v7.14.0${PAI_BUILD_VERSION_SUFFIX}
+    image: ghcr.io/futursolo/pai-apps/koboldcpp:v1.121.0-rocm-v10.1.0${PAI_BUILD_VERSION_SUFFIX}
   rocm-variant:
     extends: rocm
     image: ghcr.io/futursolo/pai-apps/koboldcpp:rocm${PAI_BUILD_VARIANT_SUFFIX}
