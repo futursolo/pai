@@ -8,10 +8,10 @@ services:
       context: ../
       target: build-final
       args:
-        - PYTORCH_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:pytorch-v2.12.0-rocm-v7.14.0-20260817
+        - PYTORCH_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:pytorch-v2.14.0-rocm-v10.1.0-20261102
         - COMFYUI_VERSION=v0.36.0
     platform: linux/amd64
-    image: ghcr.io/futursolo/pai-apps/comfyui:v0.36.0-pytorch-v2.12.0-rocm-v7.14.0${PAI_BUILD_VERSION_SUFFIX}
+    image: ghcr.io/futursolo/pai-apps/comfyui:v0.36.0-pytorch-v2.14.0-rocm-v10.1.0${PAI_BUILD_VERSION_SUFFIX}
   rocm-variant:
     extends: rocm
     image: ghcr.io/futursolo/pai-apps/comfyui:rocm${PAI_BUILD_VARIANT_SUFFIX}
