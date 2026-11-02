@@ -29,6 +29,7 @@ ARG ROCM_PATH=/opt/rocm
 
 RUN env \
     KCPP_CUDA=rocm \
+    KCPP_PORTABLE=1 \
     BRANCH_NAME=${KOBOLDCPP_VERSION} \
     TCL_LIBRARY=$(find /usr/lib/ -name 'tcl8*' | head -n 1) \
     TK_LIBRARY=$(find /usr/lib/ -name 'tk8*' | head -n 1) \
