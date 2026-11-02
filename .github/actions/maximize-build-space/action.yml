@@ -1,0 +1,98 @@
+name: Maximize build space for container runtimes
+description: >-
+  Mounts the LVM build volume at a dedicated "special path" and configures both
+  Docker (data-root) and containerd (root) to use it, so image builds get extra
+  disk space whether the runner uses Docker or containerd.
+inputs:
+  build-mount-path:
+    description: >-
+      The special path used both as the LVM build volume mount point and as the
+      data root for the container runtime (Docker data-root / containerd root).
+    required: false
+    default: /var/lib/pai-build
+runs:
+  using: composite
+  steps:
+    - name: Stop container runtimes
+      shell: bash
+      run: |
+        set -uo pipefail
+        for svc in docker.service docker.socket containerd.service; do
+          if systemctl list-unit-files --no-legend 2>/dev/null | awk '{print $1}' | grep -qxF "$svc"; then
+            sudo systemctl stop "$svc"
+          fi
+        done
+
+    - name: Configure Docker data-root
+      shell: bash
+      run: |
+        sudo mkdir -p /etc/docker
+        sudo python3 - "${{ inputs.build-mount-path }}" <<'PY'
+        import json, sys
+        path = "/etc/docker/daemon.json"
+        data = {}
+        try:
+            with open(path) as f:
+                data = json.load(f)
+        except Exception:
+            data = {}
+        data["data-root"] = sys.argv[1]
+        with open(path, "w") as f:
+            json.dump(data, f, indent=2)
+            f.write("\n")
+        PY
+
+    - name: Configure containerd root
+      shell: bash
+      run: |
+        if command -v containerd &>/dev/null; then
+          special="${{ inputs.build-mount-path }}"
+          sudo mkdir -p /etc/containerd
+          containerd config default \
+            | sed "s|^root = .*|root = \"${special}\"|" \
+            | sudo tee /etc/containerd/config.toml >/dev/null
+          echo "containerd root set to ${special}"
+        else
+          echo "containerd not installed; skipping containerd config"
+        fi
+
+    - name: Prepare special path
+      shell: bash
+      run: |
+        sudo rm -rf "${{ inputs.build-mount-path }}"
+        sudo mkdir -p "${{ inputs.build-mount-path }}"
+
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        root-reserve-mb: 1024
+        swap-size-mb: 1024
+        remove-dotnet: "true"
+        remove-android: "true"
+        remove-haskell: "true"
+        remove-codeql: "true"
+        build-mount-path: ${{ inputs.build-mount-path }}
+
+    - name: Show disk space
+      shell: bash
+      run: df -h
+
+    - name: Start container runtimes
+      shell: bash
+      run: |
+        set -uo pipefail
+        started=0
+        if systemctl list-unit-files --no-legend 2>/dev/null | awk '{print $1}' | grep -qxF "docker.service"; then
+          sudo systemctl start docker.service docker.socket
+          started=1
+          echo "Started docker.service"
+        fi
+        if systemctl list-unit-files --no-legend 2>/dev/null | awk '{print $1}' | grep -qxF "containerd.service"; then
+          sudo systemctl start containerd.service
+          started=1
+          echo "Started containerd.service"
+        fi
+        if [ "$started" -eq 0 ]; then
+          echo "::error::No container runtime (docker or containerd) service found to start."
+          exit 1
+        fi
