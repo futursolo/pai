@@ -22,10 +22,10 @@ services:
       context: ../
       target: build-final
       args:
-        - PYTORCH_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:pytorch-v2.13.0-xpu-20260817
+        - PYTORCH_BASE_IMAGE=ghcr.io/futursolo/pai-apps/base:pytorch-v2.14.1-xpu-20261102
         - COMFYUI_VERSION=v0.43.2
     platform: linux/amd64
-    image: ghcr.io/futursolo/pai-apps/comfyui:v0.43.2-pytorch-v2.13.0-xpu${PAI_BUILD_VERSION_SUFFIX}
+    image: ghcr.io/futursolo/pai-apps/comfyui:v0.43.2-pytorch-v2.14.1-xpu${PAI_BUILD_VERSION_SUFFIX}
   xpu-variant:
     extends: xpu
     image: ghcr.io/futursolo/pai-apps/comfyui:xpu${PAI_BUILD_VARIANT_SUFFIX}
