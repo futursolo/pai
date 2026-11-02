@@ -1,0 +1,11 @@
+---
+name: build-base-vulkan
+
+services:
+  vulkan:
+    build:
+      target: build-vulkan-final
+      dockerfile: ./_base/vulkan/Dockerfile
+      context: ../../
+    platform: linux/amd64
+    image: ghcr.io/futursolo/pai-apps/base:vulkan${PAI_BUILD_VERSION_SUFFIX}

@@ -1,0 +1,11 @@
+---
+name: build-base-rocm
+
+services:
+  pytorch-rocm:
+    build:
+      target: build-pytorch-rocm-final
+      dockerfile: ./_base/rocm/Dockerfile
+      context: ../../
+    platform: linux/amd64
+    image: ghcr.io/futursolo/pai-apps/base:pytorch-v2.14.0-rocm-v10.1.0${PAI_BUILD_VERSION_SUFFIX}

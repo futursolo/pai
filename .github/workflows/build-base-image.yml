@@ -7,10 +7,16 @@ name: Build Base Container
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build Base Containers
+    name: "Build Base: ${{ matrix.base }}"
     permissions:
       contents: write
       packages: write
+    strategy:
+      matrix:
+        base:
+          - intel
+          - rocm
+          - vulkan
 
     steps:
       - name: Checkout Project
@@ -52,4 +58,4 @@ jobs:
         run: |
           docker compose -f docker-compose.build.yml build
           docker compose -f docker-compose.build.yml push
-        working-directory: apps/_base
+        working-directory: apps/_base/${{ matrix.base }}
